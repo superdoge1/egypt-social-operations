@@ -11,6 +11,7 @@ const lessons = defineCollection({
     description: z.string(),
     phase: z.string(),
     order: z.number().int().positive(),
+    days: z.array(z.number().int().min(1).max(30)).min(2).max(3),
     estimatedMinutes: z.number().int().positive(),
     prerequisites: z.array(z.string()),
     outcomes: z.array(z.string()),

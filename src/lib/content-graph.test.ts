@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateLessonGraph, validateQuizCoverage } from './content-graph';
+import { validateDayCoverage, validateLessonGraph, validateQuizCoverage } from './content-graph';
 
 const lesson = (id: string, order: number, prerequisites: string[] = []) => ({ id, order, prerequisites });
 const curriculum = () => Array.from({ length: 11 }, (_, index) => lesson(`lesson-${index + 1}`, index + 1, index === 0 ? [] : [`lesson-${index}`]));
@@ -74,5 +74,35 @@ describe('validateQuizCoverage', () => {
       'Quiz lesson-1 must include at least one answer',
       'Quiz lesson-2 answer is not an option: missing',
     ]);
+  });
+});
+
+describe('validateDayCoverage', () => {
+  it('accepts a complete non-overlapping thirty-day sprint plan', () => {
+    const lengths = [2, 3, 3, 3, 3, 3, 3, 2, 3, 2, 3];
+    const plan = Array.from({ length: 11 }, (_, index) => ({
+      ...lesson(`lesson-${index + 1}`, index + 1),
+      days: Array.from({ length: lengths[index] }, (_, dayIndex) => dayIndex + 1),
+    }));
+    let day = 1;
+    for (const item of plan) {
+      const length = item.days.length;
+      item.days = Array.from({ length }, () => day++);
+    }
+    expect(validateDayCoverage(plan)).toEqual([]);
+  });
+
+  it('reports duplicate, missing, and undeclared sprint days', () => {
+    expect(validateDayCoverage([
+      { ...lesson('one', 1), days: [1, 2] },
+      { ...lesson('two', 2), days: [2, 31] },
+      { ...lesson('three', 3), days: [] },
+    ])).toEqual(expect.arrayContaining([
+      'Sprint day appears more than once: 2',
+      'Lesson two has sprint day outside 1 to 30: 31',
+      'Lesson three must declare at least one sprint day',
+      'Sprint days must cover 1 to 30 exactly; missing: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30',
+      'Sprint day coverage must contain exactly 30 days; found 2',
+    ]));
   });
 });

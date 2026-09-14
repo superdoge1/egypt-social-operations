@@ -1,6 +1,7 @@
 export interface LessonNode {
   id: string;
   order: number;
+  days?: number[];
   prerequisites: string[];
 }
 
@@ -96,6 +97,35 @@ export function validateQuizCoverage(lessons: LessonNode[], quizzes: Record<stri
       if (!optionValues.has(answer)) errors.push(`Quiz ${lessonId} answer is not an option: ${answer}`);
     }
   }
+
+  return errors;
+}
+
+export function validateDayCoverage(lessons: LessonNode[]): string[] {
+  const errors: string[] = [];
+  const dayCounts = new Map<number, number>();
+
+  for (const lesson of lessons) {
+    if (!lesson.days?.length) {
+      errors.push(`Lesson ${lesson.id} must declare at least one sprint day`);
+      continue;
+    }
+    for (const day of lesson.days) {
+      if (!Number.isInteger(day) || day < 1 || day > 30) {
+        errors.push(`Lesson ${lesson.id} has sprint day outside 1 to 30: ${day}`);
+        continue;
+      }
+      dayCounts.set(day, (dayCounts.get(day) ?? 0) + 1);
+    }
+  }
+
+  for (const [day, count] of dayCounts) {
+    if (count > 1) errors.push(`Sprint day appears more than once: ${day}`);
+  }
+
+  const missingDays = Array.from({ length: 30 }, (_, index) => index + 1).filter((day) => !dayCounts.has(day));
+  if (missingDays.length) errors.push(`Sprint days must cover 1 to 30 exactly; missing: ${missingDays.join(', ')}`);
+  if (dayCounts.size !== 30) errors.push(`Sprint day coverage must contain exactly 30 days; found ${dayCounts.size}`);
 
   return errors;
 }
