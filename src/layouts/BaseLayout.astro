@@ -7,7 +7,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = '从第一个 AI 产品，走向可验证的 Agent 工程。' } = Astro.props;
+const { title, description = '面向埃及 SUGO 客户运营的公开证据学习场。' } = Astro.props;
 const currentPath = Astro.url.pathname;
 const nav = [
   { href: withBase(''), label: '起点' },
@@ -24,14 +24,14 @@ const nav = [
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
-    <title>{title} · Vibe Coding Field Manual</title>
+    <title>{title} · Egypt Social Operations Fieldbook</title>
   </head>
   <body data-interface="agent-console">
     <a class="skip-link" href="#main">跳到正文</a>
     <header class="site-header" data-entrance>
-      <a class="brand" href={withBase('')} aria-label="Vibe Coding 首页">
-        <span class="brand-mark" aria-hidden="true">VC</span>
-        <span><strong>FIELD MANUAL</strong><small>BEGINNER → AGENT ENGINEER</small></span>
+      <a class="brand" href={withBase('')} aria-label="Egypt Social Operations 首页">
+        <span class="brand-mark" aria-hidden="true">ES</span>
+        <span><strong>FIELD BOOK</strong><small>EGYPT SOCIAL OPERATIONS</small></span>
       </a>
       <div class="header-tools">
         <span class="header-status"><i aria-hidden="true"></i> SYSTEM ONLINE</span>

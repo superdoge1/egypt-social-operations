@@ -17,7 +17,16 @@ const lessons = defineCollection({
       label: z.string(),
       url: z.url(),
       kind: z.enum(['primary', 'code', 'reference']),
+      verifiedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      jurisdiction: z.enum(['global', 'egypt', 'platform', 'company-public']),
+      stability: z.enum(['stable', 'review-quarterly', 'review-before-use']),
+      requiresInternalValidation: z.boolean(),
     })),
+    artifacts: z.array(z.object({
+      title: z.string(),
+      description: z.string(),
+      visibility: z.enum(['public-template', 'internal', 'restricted']),
+    })).min(1),
   }),
 });
 

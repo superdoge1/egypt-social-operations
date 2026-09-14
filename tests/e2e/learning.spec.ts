@@ -78,7 +78,7 @@ test('agent console keeps its responsive learning contract', async ({ page }) =>
   await primaryCta.click();
   await expect(page.locator('[data-lesson-controls]')).toHaveAttribute('data-ready', 'true');
   await page.getByRole('button', { name: '标记本节完成' }).click();
-  await page.getByRole('link', { name: 'Vibe Coding 首页' }).click();
+  await page.getByRole('link', { name: 'Egypt Social Operations 首页' }).click();
   await expect(percentage).toHaveText('9%');
 });
 
@@ -107,9 +107,9 @@ test('learner completes a lesson and keeps progress after reload', async ({ page
 
 test('base-path navigation and final project route work', async ({ page }) => {
   await page.goto('./roadmap/');
-  await expect(page).toHaveURL(/\/vibe-coding\/roadmap\/$/);
+  await expect(page).toHaveURL(/\/egypt-social-operations\/roadmap\/$/);
   await page.getByRole('link', { name: /交付一个 Agent-ready 仓库/ }).first().click();
-  await expect(page).toHaveURL(/\/vibe-coding\/learn\/agent-capstone\/$/);
+  await expect(page).toHaveURL(/\/egypt-social-operations\/learn\/agent-capstone\/$/);
   await expect(page.getByRole('heading', { name: '交付一个 Agent-ready 仓库' })).toBeVisible();
 });
 
