@@ -66,4 +66,4 @@ All lesson source links point to the public starting points named by the authori
 
 ## Commit
 
-Code commit SHA: pending until the Stage A commit is created.
+Code commit SHA: `33417f5` (`feat: establish Egypt curriculum manifest`).
