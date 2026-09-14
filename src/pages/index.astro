@@ -22,14 +22,14 @@ const lessonIds=lessons.map(({data})=>data.id);
     </dl>
   </section>
   <section class="hero" data-entrance><div class="hero-statement"><span class="eyebrow">EGYPT SOCIAL OPERATIONS · 11 MODULES</span><h1>先做出来。<span>再做可靠。</span></h1><p class="hero-copy">一条从全球社交娱乐类别，到埃及 SUGO 客户运营的公开证据学习路径。每一节都留下可验证的产出，而不是只收藏结论。</p><div class="hero-actions"><a class="button" href={withBase(`learn/${lessonIds[0]}/`)}>开始第一次构建</a><a class="button secondary" href={withBase('roadmap/')}>查看完整路线</a></div></div>
-  <div class="terminal" aria-label="课程执行轨迹"><div class="terminal-bar"><span>learning-pipeline.log</span><span class="terminal-local"><i aria-hidden="true"></i> LOCAL</span></div><pre><span class="info">[01]</span> idea → validated problem
-<span class="info">[02]</span> prompt → working prototype
-<span class="ok">[03]</span> prototype → deployed product
+  <div class="terminal" aria-label="课程执行轨迹"><div class="terminal-bar"><span>evidence-pipeline.log</span><span class="terminal-local"><i aria-hidden="true"></i> LOCAL</span></div><pre><span class="info">[01]</span> public surface → evidence ledger
+<span class="info">[02]</span> Egypt context → interview gaps
+<span class="ok">[03]</span> SUGO operations → reviewable artifact
 
-<span class="agent">[AGENT]</span> context indexed
-<span class="agent">[AGENT]</span> spec accepted
-<span class="agent">[AGENT]</span> tests observed red → green
-<span class="ok">[SHIP]</span> evidence attached_</pre></div></section>
+<span class="info">[OPS]</span> source dates recorded
+<span class="info">[OPS]</span> internal unknowns marked
+<span class="info">[OPS]</span> safety gates attached
+<span class="ok">[SHIP]</span> evidence pack ready_</pre></div></section>
   <ProgressPanel lessonIds={lessonIds} storageKey="egyptSocialOperationsProgress.v1" />
   <section class="build-trace" data-entrance><div class="section-heading"><h2>运营学习轨迹</h2><p>11 节课程从全球类别、SUGO 用户旅程与埃及市场出发，逐步形成可交接的证据包。</p></div><div class="trace">{lessons.map(({data})=><LessonCard {...data}/>)}</div></section>
 </div></BaseLayout>

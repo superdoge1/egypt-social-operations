@@ -1,5 +1,71 @@
 ---
-import {getCollection} from 'astro:content';import BaseLayout from '../layouts/BaseLayout.astro';import LessonCard from '../components/LessonCard.astro';
-const lessons=(await getCollection('lessons')).sort((a,b)=>a.data.order-b.data.order);const phases=[...new Set(lessons.map(({data})=>data.phase))];
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/urls';
+
+const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
+const phases = [...new Set(lessons.map(({ data }) => data.phase))];
+const totalMinutes = lessons.reduce((sum, { data }) => sum + data.estimatedMinutes, 0);
 ---
-<BaseLayout title="学习路线"><div class="page-shell"><span class="eyebrow">CURRICULUM MAP</span><div class="section-heading"><h2>三段进阶</h2><p>不要跳过交付证据。每一阶段的项目都会成为下一阶段的真实上下文。</p></div><div class="phase-grid">{phases.map((phase,index)=><article class="phase-card"><strong>PHASE {index+1}</strong><h2>{phase}</h2><p>{lessons.filter(({data})=>data.phase===phase).length} 节 · {lessons.filter(({data})=>data.phase===phase).reduce((sum,{data})=>sum+data.estimatedMinutes,0)} 分钟核心学习</p></article>)}</div>{phases.map((phase)=><section><div class="section-heading"><h2>{phase}</h2></div><div class="trace">{lessons.filter(({data})=>data.phase===phase).map(({data})=><LessonCard {...data}/>)}</div></section>)}</div></BaseLayout>
+
+<BaseLayout title="30 天学习路线">
+  <div class="page-shell">
+    <span class="eyebrow">CURRICULUM MAP · EGYPT / SUGO</span>
+    <header class="section-heading">
+      <div>
+        <h1>30 天证据路线</h1>
+        <p>四个阶段、30 天、30 小时。每天完成一个可追溯产出，再用评审门决定是否进入下一段。</p>
+      </div>
+      <p>{lessons.length} 节课 · {totalMinutes / 60} 小时 · Days 1–30</p>
+    </header>
+
+    <div class="phase-grid">
+      {phases.map((phase, index) => {
+        const phaseLessons = lessons.filter(({ data }) => data.phase === phase);
+        return (
+          <article class="phase-card">
+            <strong>PHASE {index + 1}</strong>
+            <h2>{phase}</h2>
+            <p>{phaseLessons.length} 节 · {phaseLessons.reduce((sum, { data }) => sum + data.estimatedMinutes, 0) / 60} 小时</p>
+          </article>
+        );
+      })}
+    </div>
+
+    {phases.map((phase) => (
+      <section aria-labelledby={`phase-${phase}`}>
+        <div class="section-heading">
+          <h2 id={`phase-${phase}`}>{phase}</h2>
+          <p>把本阶段的公开证据、内部请求、访谈问题和运营假设放进同一份交付包。</p>
+        </div>
+        <ol class="trace roadmap-list">
+          {lessons.filter(({ data }) => data.phase === phase).map(({ data }) => (
+            <li>
+              <article class="lesson-card">
+                <div class="trace-node" aria-hidden="true"><span>{String(data.order).padStart(2, '0')}</span></div>
+                <div class="lesson-card-body">
+                  <p class="lesson-meta"><span>Days {data.days[0]}–{data.days[data.days.length - 1]}</span><span>{data.estimatedMinutes} MIN</span></p>
+                  <span class="stage-index">MODULE {String(data.order).padStart(2, '0')}</span>
+                  <h3><a href={withBase(`learn/${data.id}/`)}>{data.title}</a></h3>
+                  <p>{data.description}</p>
+                  <p class="outcome">产出：{data.outcomes[0]}</p>
+                </div>
+              </article>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+
+    <section class="sources" aria-labelledby="review-gates-heading">
+      <span class="eyebrow">REVIEW GATES</span>
+      <h2 id="review-gates-heading">四道评审门</h2>
+      <ol>
+        <li><strong>Day 8 · 经营基础</strong>：指标字典、数据请求与经营漏斗能区分公开事实、内部未知、访谈主题和运营假设。</li>
+        <li><strong>Day 17 · 埃及市场</strong>：语言、本地化、增长和安全护栏已由 native review、数据请求与访谈问题共同检查。</li>
+        <li><strong>Day 27 · 经营系统</strong>：RACI、metric grain、隐私边界、SQL/BI 需求和安全升级路径可以复述。</li>
+        <li><strong>Day 30 · 90 天交付</strong>：最终包恰好包含三项优先级；每项均有基线或 baseline-request、护栏、停止条件和复盘节奏。</li>
+      </ol>
+    </section>
+  </div>
+</BaseLayout>

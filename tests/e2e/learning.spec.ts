@@ -1,5 +1,43 @@
 import { expect, test } from '@playwright/test';
 
+const lessonRoutes = [
+  'social-entertainment-landscape',
+  'sugo-product-ecosystem',
+  'metrics-virtual-economy',
+  'egypt-market-users',
+  'language-culture-localization',
+  'growth-relationship-retention',
+  'creator-room-supply',
+  'monetization-risk-controls',
+  'trust-safety-regulation',
+  'management-data-collaboration',
+  'ninety-day-capstone',
+];
+
+test('every lesson renders its evidence and daily-sprint contract', async ({ page }) => {
+  for (const lessonId of lessonRoutes) {
+    await page.goto(`learn/${lessonId}/`);
+    await expect(page.locator('main h1')).toBeVisible();
+
+    const ledger = page.locator('[data-evidence-ledger]');
+    await expect(ledger).toBeVisible();
+    for (const label of ['公开资料已验证', '内部数据待验证', '访谈待交叉验证', '运营假设']) {
+      await expect(ledger).toContainText(label);
+    }
+
+    await expect(page.locator('table[data-daily-sprint]')).toBeVisible();
+    await expect(page.locator('[data-artifact-list]')).toBeVisible();
+    await expect(page.locator('[data-artifact-visibility]').first()).toBeVisible();
+
+    const sourceRow = page.locator('[data-source-row]').first();
+    await expect(sourceRow).toBeVisible();
+    await expect(sourceRow).toContainText(/verified \d{4}-\d{2}-\d{2}/);
+    await expect(sourceRow).toContainText(/jurisdiction/i);
+    await expect(sourceRow).toContainText(/stability/i);
+    await expect(sourceRow).toContainText(/internal validation/i);
+  }
+});
+
 test.describe('approved console design contracts', () => {
   test('uses the exact approved nine-token palette', async ({ page }) => {
     await page.goto('./');
@@ -53,7 +91,7 @@ test.describe('approved console design contracts', () => {
   });
 });
 
-test('agent console keeps its responsive learning contract', async ({ page }) => {
+test('learning interface keeps its responsive contract', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
@@ -86,11 +124,11 @@ test('learner completes a lesson and keeps progress after reload', async ({ page
   await page.goto('./');
   await expect(page.getByRole('heading', { name: '先做出来。 再做可靠。' })).toBeVisible();
   await page.getByRole('link', { name: '开始第一次构建' }).click();
-  await expect(page.getByRole('heading', { name: '把一句想法变成第一次构建' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '看懂社交娱乐：从类别到 MICO WORLD' })).toBeVisible();
   await expect(page.locator('[data-lesson-controls]')).toHaveAttribute('data-ready', 'true');
 
   await page.getByLabel('学习笔记 仅保存在这台设备').fill('先写目标和验收，再选择技术栈。');
-  await page.getByLabel('一句话目标、非目标与验收示例').check();
+  await page.getByLabel('公开产品表面、内部数据、访谈和运营假设').check();
   await page.getByRole('button', { name: '检查答案' }).click();
   await expect(page.getByText('正确。把这条原则带进下一次构建。')).toBeVisible();
   await page.getByRole('button', { name: '标记本节完成' }).click();
@@ -108,9 +146,9 @@ test('learner completes a lesson and keeps progress after reload', async ({ page
 test('base-path navigation and final project route work', async ({ page }) => {
   await page.goto('./roadmap/');
   await expect(page).toHaveURL(/\/egypt-social-operations\/roadmap\/$/);
-  await page.getByRole('link', { name: /交付一个 Agent-ready 仓库/ }).first().click();
-  await expect(page).toHaveURL(/\/egypt-social-operations\/learn\/agent-capstone\/$/);
-  await expect(page.getByRole('heading', { name: '交付一个 Agent-ready 仓库' })).toBeVisible();
+  await page.getByRole('link', { name: /交付 SUGO 埃及 Day 31–90 经营方案/ }).first().click();
+  await expect(page).toHaveURL(/\/egypt-social-operations\/learn\/ninety-day-capstone\/$/);
+  await expect(page.getByRole('heading', { name: '交付 SUGO 埃及 Day 31–90 经营方案' })).toBeVisible();
 });
 
 test('unknown route shows a directed 404', async ({ page }) => {

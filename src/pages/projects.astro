@@ -1,8 +1,68 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';import {withBase} from '../lib/urls';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/urls';
 ---
-<BaseLayout title="项目实验室"><div class="page-shell"><span class="eyebrow">EVIDENCE OVER CLAIMS</span><div class="section-heading"><h2>两个项目，一次升级</h2><p>第二个项目不是重新开坑，而是用 Agent 工程把第一个项目变成可重复维护的系统。</p></div><div class="project-grid">
-<article class="project-card"><span class="eyebrow">CAPSTONE 01</span><h2>AI 微产品</h2><p>围绕一个经过访谈验证的窄问题，完成原型、数据闭环和公开部署。</p><ul><li>一句话目标与非目标</li><li>3 条用户证据</li><li>可运行产品与错误路径</li><li>上线链接与反馈记录</li></ul><a class="button secondary" href={withBase('learn/fullstack-delivery/')}>进入交付课</a></article>
-<article class="project-card"><span class="eyebrow">LAB</span><h2>可复用 Skill</h2><p>把一个至少重复三次的工作流写成带输入、输出、失败条件和验证步骤的 Skill。</p><ul><li>触发边界</li><li>最小上下文</li><li>失败样例</li><li>真实任务验证</li></ul><a class="button secondary" href={withBase('learn/skills-mcp/')}>进入 Skills 课</a></article>
-<article class="project-card"><span class="eyebrow">CAPSTONE 02</span><h2>Agent-ready 仓库</h2><p>为入门项目补齐规格、计划、测试、评审与可重复部署，并完成一次跨会话交接。</p><ul><li>项目级指令</li><li>规格与实施计划</li><li>红绿测试证据</li><li>发布检查表</li></ul><a class="button" href={withBase('learn/agent-capstone/')}>开始最终项目</a></article>
-</div></div></BaseLayout>
+
+<BaseLayout title="证据项目板">
+  <div class="page-shell">
+    <span class="eyebrow">EVIDENCE PACK · DELIVERY BOARD</span>
+    <header class="section-heading">
+      <div>
+        <h1>证据项目板</h1>
+        <p>把三十天的观察整理成可复核的证据包，再交付一份有边界、有 owner、有安全护栏的 Day 31–90 方案。</p>
+      </div>
+      <p>公开资料 · 内部请求 · 访谈交叉验证 · 运营假设</p>
+    </header>
+
+    <div class="project-grid">
+      <article class="project-card">
+        <span class="eyebrow">PACK 01 · DAYS 1–8</span>
+        <h2>全球类别与 SUGO 经营底图</h2>
+        <p>将社交娱乐类别、SUGO 产品表面、用户旅程和指标口径放在一张可追溯底图中。</p>
+        <ul>
+          <li>行业地图与产品矩阵</li>
+          <li>用户旅程与供需关系</li>
+          <li>指标字典、数据需求单、经营漏斗</li>
+          <li>Day 8 评审记录与未决问题</li>
+        </ul>
+        <a class="button secondary" href={withBase('learn/metrics-virtual-economy/')}>进入 Day 8 评审课</a>
+      </article>
+
+      <article class="project-card">
+        <span class="eyebrow">PACK 02 · DAYS 9–27</span>
+        <h2>埃及本地化与经营系统</h2>
+        <p>把客群假设、语言 QA、增长回路、供给、支付、安全与协作口径串成一份可交叉验证的系统包。</p>
+        <ul>
+          <li>三语词卡、文化日历、本地化 QA</li>
+          <li>增长实验、供给质检、付费护栏</li>
+          <li>风险登记、升级矩阵、RACI 与 SQL/BI 请求</li>
+          <li>Day 17 与 Day 27 评审记录</li>
+        </ul>
+        <a class="button secondary" href={withBase('learn/management-data-collaboration/')}>进入 Day 27 评审课</a>
+      </article>
+
+      <article class="project-card">
+        <span class="eyebrow">FINAL · DAYS 28–30</span>
+        <h2>Day 31–90 经营方案</h2>
+        <p>最终交付恰好三项优先级；每项都必须有 owner、KPI 定义、基线或 baseline-request、方法、依赖、预算假设、护栏、停止条件和复盘节奏。</p>
+        <ol>
+          <li>基线与 metric contract</li>
+          <li>本地化的安全 first-room journey</li>
+          <li>可靠 host/room 供给回路</li>
+        </ol>
+        <a class="button" href={withBase('learn/ninety-day-capstone/')}>进入最终交付课</a>
+      </article>
+    </div>
+
+    <section class="sources" aria-labelledby="gate-board-heading">
+      <span class="eyebrow">GATE BOARD</span>
+      <h2 id="gate-board-heading">四道评审门</h2>
+      <ol>
+        <li><strong>Day 8</strong>：基础指标与经营漏斗的 grain、来源、数据请求和 unknown 已记录。</li>
+        <li><strong>Day 17</strong>：埃及语言/文化、本地化 QA、增长假设与安全护栏有 native review 和访谈问题。</li>
+        <li><strong>Day 27</strong>：RACI、Dashboard 草图、SQL/BI 需求和风险升级路径均可复现。</li>
+        <li><strong>Day 30</strong>：最终 evidence pack 恰好三项优先级，未验证数字保持 pending，并通过回滚演练。</li>
+      </ol>
+    </section>
+  </div>
+</BaseLayout>
