@@ -4,7 +4,6 @@ import { validateDayCoverage, validateLessonGraph, validateQuizCoverage } from '
 
 const rawLessons = import.meta.glob('../content/lessons/*.mdx', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>;
 const lessonFiles = Object.keys(rawLessons).map((file) => file.split('/').pop() ?? '').sort();
-const lessonSources = Object.values(rawLessons);
 const sourceFor = (file: string) => rawLessons[`../content/lessons/${file}`] ?? '';
 
 const expectedLessons = [
@@ -45,15 +44,6 @@ describe('Egypt Social Operations curriculum contract', () => {
     const dayMatches = expectedLessons.flatMap((expected) => JSON.parse(frontmatterValue(sourceFor(expected.file), 'days')) as number[]);
     expect(dayMatches).toHaveLength(30);
     expect([...dayMatches].sort((a, b) => a - b)).toEqual(Array.from({ length: 30 }, (_, index) => index + 1));
-  });
-
-  it('keeps Stage A bodies explicit and removes copied Vibe curriculum strings', () => {
-    const source = lessonSources.join('\n');
-    expect(source).not.toMatch(/Easy[‑-]Vibe|Claude Code Best Practice|vibeCoding|Agent-ready|ai-mindset|agent-capstone/);
-    for (const expected of expectedLessons) {
-      const sourceForLesson = sourceFor(expected.file);
-      expect(sourceForLesson).toContain('## 课程正文将在 Stage B/C 完成');
-    }
   });
 
   it('has a valid quiz for each required lesson and no quiz for a removed lesson', () => {

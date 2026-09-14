@@ -18,6 +18,54 @@ artifacts:
   - { title: 增长实验池, description: 为每个实验记录假设、序列、依赖、guardrail、停止条件和复盘日期的模板。, visibility: public-template }
 ---
 
-## 课程正文将在 Stage B/C 完成
+## 01｜增长的最小单位是一次有意义的关系
 
-Stage A 先锁定课程 manifest、来源元数据、证据产物和依赖关系；完整教学正文、每日冲刺和测验解释将在后续阶段补齐。
+把增长漏斗写成行为，而不是渠道口号：`acquisition` → 进入清晰的 first-room 或匹配入口 → `time to first meaningful interaction` → 回到关系、Moments 或 room → `D1/D7/D30` retention 或 reactivation。每个阶段都要能指出事件、时间窗、分母、切片和 owner。安装、点击或打开页面可以是前置事件，却不能单独证明陪伴承诺兑现。
+
+Egypt 应用要把渠道、城市、性别、设备、语言和安全暴露并列切分。全国 ad-reach 背景只能帮助选择待验证渠道；它不提供 SUGO 的 acquisition、retention、payer conversion 或安全结果。增长实验先问“用户如何获得回应”，再问“如何扩大流量”。
+
+## 02｜证据分层让实验可停止
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO 商店页公开了匹配、语音房、1:1 沟通、Moments、主播、礼物等入口；Platform Guidelines 公开了报告、警告、功能/直播限制、封禁和申诉等机制摘要。 |
+| 内部数据待验证 | 各渠道的 first-room、meaningful interaction、D1/D7/D30、room fill、报告/1,000 room-hours、appeal SLA 和 safety churn 需要内部定义与数据；本课不写当前结果。 |
+| 访谈待交叉验证 | 与 growth、room operations、support、moderation 和用户核对首个互动阻塞点、重返理由、渠道归因和安全体验；缺失访问要保留为 evidence gap。 |
+| 运营假设 | 可靠的房间主题、及时回应和可理解的报告入口可能同时提升激活与安全感；必须用分层实验验证，而非凭感觉扩预算。 |
+
+## 03｜设计带 guardrail 的实验
+
+一张实验卡至少有：假设、目标行为、受众切片、入口版本、事件定义、观察窗口、依赖、预算假设、主要指标、安全护栏、停止条件和 review cadence。护栏可以包括 reports per 1,000 room-hours、申诉延迟、退款/拒付、异常联系集中度和 safety churn；阈值由内部 owner 依据基线制定，未取数时写 `pending`，不要凭空填数字。
+
+Reactivate 不是无差别催回。先按最近一次可见行为分群：看过房间但未互动、发生过 1:1、发布过 Moment、遇到支持或安全问题。消息文案需要对应语言层级和同意边界；例如候选的 Egyptian Arabic `ارجع تاني`（`erga3 tany`，回来再试）必须 native review，不能暗示用户一定会回来或承诺奖励。
+
+## 04｜Daily sprint · Days 15–17
+
+| Day | 学习循环 | 可观察输出 |
+| --- | --- | --- |
+| Day 15 | 10 分钟概念 / 15 分钟主源阅读（SUGO listing + Platform Guidelines）/ 25 分钟按渠道和入口绘制漏斗 / 10 分钟测验与证据更新 | `渠道漏斗 v0`：从 acquisition 到 meaningful interaction 的每步有事件、分母、语言和安全护栏。 |
+| Day 16 | 45 分钟访谈（growth、support 或用户任选一类）/ 15 分钟整理与证据标注 | `激活诊断 v0`：三条首个互动阻塞点、需取数的字段、需第二访谈验证的观点。 |
+| Day 17 | 10 分钟概念 / 15 分钟复读公开政策与实验边界 / 25 分钟审阅实验卡和停止条件 / 10 分钟测验与证据更新 | `增长实验池 v0`，至少三张卡，均有 guardrail、依赖和 pending 的基线栏。 |
+
+> **Review gate · Day 17** — 只有当实验能说清目标行为、指标分母、分层切片、安全护栏、停止条件和内部 owner，才能进入供给冷启动阶段。
+
+## 05｜现场任务：一次漏斗诊断访谈
+
+用匿名场景请受访者重述最近一次从渠道到房间的路径：在哪里看到入口、是否理解下一步、何时第一次得到回应、为什么离开或再次回来。对 growth/ops 角色追问归因、排班、语言版本和异常流量；对 support/moderation 角色追问安全触点和申诉反馈。不要索要个人账号、私聊内容、未授权报表或可识别事件。
+
+将每条发现标成事实、解释、未知或假设，并在实验池中写出最小可逆动作。若没有足够的内部基线，先运行 instrumentation 或 baseline-request，不用公开市场人口去设置 retention 或收入目标。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+渠道漏斗：渠道/设备/语言 | 阶段事件 | 分母 | 时间窗 | 当前基线或 pending | 安全切片 | owner
+激活诊断：阻塞点 | 证据 | 假设 | 需取字段 | 需访谈对象 | 风险 | 下一步
+增长实验池：假设 | 版本 | 受众 | 序列 | KPI 定义 | budget assumption | guardrail | stop | review
+```
+
+检查清单：
+
+- 不把下载量、ad reach、安装或公开评论写成 SUGO DAU/MAU、留存或 payer rate。
+- 每张实验卡有可逆步骤、依赖、内部 owner 和安全停止条件；未知数字写 `pending`。
+- 增长和安全共用切片与 review cadence，不把 female safety、Arabic moderation 当作投放文案问题。
+- 访谈只保留去标识化主题；不保存账号、联系方式、私聊或可识别安全个案。
