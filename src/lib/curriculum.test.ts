@@ -48,6 +48,35 @@ describe('Egypt Social Operations curriculum contract', () => {
     expect([...dayMatches].sort((a, b) => a - b)).toEqual(Array.from({ length: 30 }, (_, index) => index + 1));
   });
 
+  it('keeps each daily sprint table aligned with its frontmatter days', () => {
+    const tableDays = expectedLessons.flatMap((expected) => {
+      const table = sourceFor(expected.file).match(/<table data-daily-sprint>[\s\S]*?<\/table>/)?.[0] ?? '';
+      const days = [...table.matchAll(/<td>Day (\d+)<\/td>/g)].map((match) => Number(match[1]));
+      expect(days).toEqual(expected.days);
+      return days;
+    });
+
+    expect(tableDays).toHaveLength(30);
+    expect([...tableDays].sort((a, b) => a - b)).toEqual(Array.from({ length: 30 }, (_, index) => index + 1));
+  });
+
+  it('keeps the capstone at exactly three numbered priorities', () => {
+    const source = sourceFor('11-ninety-day-capstone.mdx');
+    const priorities = [...source.matchAll(/^### Priority (\d+) —/gm)].map((match) => Number(match[1]));
+    expect(priorities).toEqual([1, 2, 3]);
+  });
+
+  it('registers the official Egypt Google Play payment-support source where used', () => {
+    const sourceUrl = 'https://support.google.com/googleplay/answer/2651410';
+    for (const file of ['04-egypt-market-users.mdx', '08-monetization-risk-controls.mdx']) {
+      const sourceLine = sourceFor(file).split('\n').find((line) => line.includes(sourceUrl)) ?? '';
+      expect(sourceLine).toContain(`verifiedAt: "2026-09-14"`);
+      expect(sourceLine).toContain('jurisdiction: egypt');
+      expect(sourceLine).toContain('stability: review-before-use');
+      expect(sourceLine).toContain('requiresInternalValidation: true');
+    }
+  });
+
   it('budgets one hour for each declared lesson day', () => {
     const lessons = expectedLessons.map((expected) => ({
       id: expected.id,

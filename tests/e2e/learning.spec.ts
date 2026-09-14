@@ -126,11 +126,12 @@ test('learner completes a lesson and keeps progress after reload', async ({ page
   await page.getByRole('link', { name: '开始第一次构建' }).click();
   await expect(page.getByRole('heading', { name: '看懂社交娱乐：从类别到 MICO WORLD' })).toBeVisible();
   await expect(page.locator('[data-lesson-controls]')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('[data-note-warning]')).toContainText('公司机密、账号凭据、个人数据或可识别个案');
 
   await page.getByLabel('学习笔记 仅保存在这台设备').fill('先写目标和验收，再选择技术栈。');
   await page.getByLabel('公开产品表面、内部数据、访谈和运营假设').check();
   await page.getByRole('button', { name: '检查答案' }).click();
-  await expect(page.getByText('正确。把这条原则带进下一次构建。')).toBeVisible();
+  await expect(page.getByText('正确。把证据分层带进下一次 Egypt 运营复盘。')).toBeVisible();
   await page.getByRole('button', { name: '标记本节完成' }).click();
   await page.reload();
 
