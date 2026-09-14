@@ -5,7 +5,7 @@ description: 将公开证据、内部基线请求、安全护栏和三项优先�
 phase: 90 天交付
 order: 11
 days: [28, 29, 30]
-estimatedMinutes: 75
+estimatedMinutes: 180
 prerequisites: [management-data-collaboration]
 outcomes: [SUGO 埃及经营基线与 Day 31–90 方案]
 sourceLinks:
@@ -17,6 +17,74 @@ artifacts:
   - { title: SUGO 埃及经营基线与 Day 31–90 方案, description: 只包含三项证据支持的优先级、基线或 baseline-request、方法、护栏与复盘节奏；未知数字保持 pending。, visibility: restricted }
 ---
 
-## 课程正文将在 Stage B/C 完成
+## 01｜把 30 天证据收束为可复盘的 90 天
 
-Stage A 先锁定课程 manifest、来源元数据、证据产物和依赖关系；完整教学正文、每日冲刺和测验解释将在后续阶段补齐。
+Day 31–90 不是一份漂亮的战略宣言，而是一组能被 owner 执行、被数据复算、被安全团队叫停的实验。先回看 evidence pack：哪些是公开事实，哪些是内部 baseline-request，哪些来自访谈，哪些只是运营假设。再把依赖按先后排列，保留空白的数字和待批准决定。未知不削弱方案；伪造精确目标才会让方案失去可信度。
+
+最终交付必须只选三项优先级。每项包含 owner、KPI 定义、actual baseline 或 baseline-request、target-setting method、experiment sequence、dependencies、budget assumption、safety guardrail、stop condition 和 review cadence。目标数字由内部 owner 在基线和安全约束确认后设定；本课不预填任何数值目标。
+
+## 02｜证据标签成为每项优先级的页眉
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | MICO WORLD 官网公开 portfolio 与 Egypt presence；SUGO 公开产品表面；DataReportal、PDPC 等提供 Egypt 市场与监管入口。所有引用保留来源、查阅/修订日期和稳定性。 |
+| 内部数据待验证 | 产品基线、渠道、房间、留存、付费、退款、safety 与供给数据必须由内部请求填充；未知数字写 `pending`，不从公开材料推导。 |
+| 访谈待交叉验证 | 产品/数据、Egypt ops、support/moderation、供给侧和用户主题要与第二来源交叉验证；无法访问时保留 access gap 和 owner。 |
+| 运营假设 | 三项优先级的实验顺序、主题、语言和资源安排是可逆假设；每项必须有 guardrail、停止条件和复盘节奏。 |
+
+## 03｜三项优先级：只交付这三项
+
+### Priority 1 — 基线与 metric contract
+
+- **Owner / KPI**：由 Egypt operations 与 data owner 共同确认；KPI 定义为按城市、渠道、语言、设备、room/host 和 safety exposure 切片的 acquisition、meaningful interaction、room liquidity、retention、payer、refund/chargeback 与安全指标集合，具体 grain 和分母写入 metric contract。
+- **Baseline / target-setting**：actual baseline 若已获批则填来源、时间窗和版本；否则写 `baseline-request`。目标采用内部基线、风险容忍度和资源约束共同设定的方法，不填写目标数字。
+- **Experiment sequence / dependencies**：先审计事件与权限 → 生成最小 cohort/漏斗 → 与周会复核 → 再决定后续实验；依赖 data access、privacy review、RACI 和 dashboard owner。
+- **Budget / safety / stop / cadence**：budget assumption 先写 analyst/ops capacity 与已批准工具；不得新增未批准支出。安全 guardrail 包含隐私最小化、报告/申诉切片和 access log；若口径无法复现或安全暴露上升，停止并回滚。每周复核，重大风险即时升级。
+
+### Priority 2 — 本地化的安全 first-room journey
+
+- **Owner / KPI**：由 Egypt growth、localization/native reviewer 与 trust & safety owner 共同负责；KPI 定义为不同语言版本从 acquisition 到首次 meaningful interaction 的事件链，并关联 room 质量、报告和 appeal 信号，不把市场 ad reach 当分母。
+- **Baseline / target-setting**：请求按语言、设备、渠道和安全暴露切片的现状；缺失时保持 `baseline-request`。目标方法由已验证的首个互动和安全基线、native review 结果与服务容量共同决定，不写百分比。
+- **Experiment sequence / dependencies**：先 native review 与 RTL QA → 选一个可逆入口做小范围体验 → 检查回应与安全护栏 → 复盘后再扩展；依赖批准文案、可靠 room supply、报告/申诉入口和数据事件。
+- **Budget / safety / stop / cadence**：budget assumption 优先使用现有翻译、review 和 support capacity；不承诺奖励。安全 guardrail 包含女性安全、未成年人、骚扰/诈骗报告和 consent；若文案误导、报告风险上升或 native review 未完成，立即停止。每周运营/安全复盘。
+
+### Priority 3 — 可靠 host/room 供给回路
+
+- **Owner / KPI**：由 Egypt room operations、supply owner 与 support/safety owner 负责；KPI 定义为已批准排班的 room availability、按时开播、首次互动机会、质量检查与安全升级事件，结算或现金流出字段不在公开方案中填充。
+- **Baseline / target-setting**：请求 host/room、排班、主题、回应和 safety exposure 的聚合基线；若不可得写 `baseline-request`。目标方法采用可靠性基线、用户体验和安全容量共同确认的 guardrail-based approach，不编造供给或收入目标。
+- **Experiment sequence / dependencies**：先选少量主题与排班 → 验证质检和替班 → 观察用户回应与安全 → 再决定是否扩展；依赖合规招募、培训、native moderation、support escalation 和 approved budget。
+- **Budget / safety / stop / cadence**：budget assumption 只写已批准的培训、支持和运营容量，host cash-out、agency commission 和商品规则保持 pending。安全 guardrail 包含房间报告、升级、申诉、女性安全和语言覆盖；若排班失信、风险升级或证据不足，停止扩容。每周供给/安全联合复盘。
+
+## 04｜Daily sprint · Days 28–30
+
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 28</td><td>10 分钟概念 / 15 分钟复读 1–10 课来源与证据 / 25 分钟合并 baseline-request 与三项优先级 / 10 分钟测验与证据更新</td><td><code>SUGO 埃及经营基线 v0</code>：事实、未知、访谈缺口、数据请求和 owner 逐项可追溯。</td></tr>
+    <tr><td>Day 29</td><td>45 分钟访谈（跨团队 review panel）/ 15 分钟整理与冲突标注</td><td><code>Day 31–90 方案 v0</code>：三项优先级都有 KPI、依赖、预算假设、护栏、停止条件和复盘节奏。</td></tr>
+    <tr><td>Day 30</td><td>10 分钟概念 / 15 分钟主源与风险复核 / 25 分钟执行顺序和回滚演练 / 10 分钟测验与证据更新</td><td>交付最终 evidence pack 索引、未决清单和签核状态；未知数字保持 <code>pending</code>。</td></tr>
+  </tbody>
+</table>
+
+> **Review gate · Day 30** — 交付必须恰好包含三项优先级；每项都有 owner、KPI 定义、actual baseline 或 baseline-request、target-setting method、experiment sequence、dependencies、budget assumption、safety guardrail、stop condition 和 review cadence。没有内部基线时不得填数字目标。
+
+## 05｜现场任务：用跨团队评审发现空白
+
+邀请 product/data、Egypt operations、support/moderation、supply-side 和 end-user 代表（若无法访问，保留 access gap），让每位评审只回答三件事：哪条证据可以复核？哪一个依赖尚未满足？什么安全信号会叫停？评审记录只留去标识化主题、决定、owner 和日期；不要复制访谈原文、个人数据、真实案件或未授权商业条款。
+
+然后按 Day 31–90 的周次排出可逆顺序：先取基线和完成 review，再做小实验，再依据 guardrail 决定扩大、修改或停止。将所有金额、转化率、留存、payer、现金流出、佣金和 moderation 结果留在 pending，直到有获批来源。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+基线：指标 | grain/分母 | 切片 | actual baseline 或 baseline-request | 来源/日期 | owner | 状态
+优先级卡：priority | owner | KPI definition | baseline/target method | sequence | dependency | budget assumption | safety guardrail | stop | cadence
+方案索引：证据链接 | 事实/未知/访谈/假设 | 决策 | 未决项 | 审批人 | 下次复核
+```
+
+检查清单：
+
+- 方案恰好有三项优先级；每项都完成九个必填维度，未知字段写 `pending`。
+- 不编造 DAU/MAU、收入、retention、payer rate、coin/diamond ratio、host cash-out、agency commission 或 moderation performance。
+- MICO WORLD、Mico World Limited、Mobile Alpha Limited、IndiaMasterApp 的身份差异保持为 diligence question。
+- 每个动作都有安全护栏、停止条件、回滚或升级路径，且不含私人链接、账号、个人数据或真实个案。

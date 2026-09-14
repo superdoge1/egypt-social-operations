@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { quizzes } from '../data/quizzes';
-import { validateDayCoverage, validateLessonGraph, validateQuizCoverage } from './content-graph';
+import { validateDayCoverage, validateLessonDurations, validateLessonGraph, validateQuizCoverage } from './content-graph';
 
 const rawLessons = import.meta.glob('../content/lessons/*.mdx', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>;
 const lessonFiles = Object.keys(rawLessons).map((file) => file.split('/').pop() ?? '').sort();
@@ -25,6 +25,8 @@ const frontmatterValue = (source: string, field: string) => {
   return match?.[1]?.trim() ?? '';
 };
 
+const frontmatterNumber = (source: string, field: string) => Number(frontmatterValue(source, field));
+
 describe('Egypt Social Operations curriculum contract', () => {
   it('contains the exact lesson files, identities, phases, orders, and day ranges', () => {
     expect(lessonFiles).toEqual(expectedLessons.map(({ file }) => file));
@@ -44,6 +46,17 @@ describe('Egypt Social Operations curriculum contract', () => {
     const dayMatches = expectedLessons.flatMap((expected) => JSON.parse(frontmatterValue(sourceFor(expected.file), 'days')) as number[]);
     expect(dayMatches).toHaveLength(30);
     expect([...dayMatches].sort((a, b) => a - b)).toEqual(Array.from({ length: 30 }, (_, index) => index + 1));
+  });
+
+  it('budgets one hour for each declared lesson day', () => {
+    const lessons = expectedLessons.map((expected) => ({
+      id: expected.id,
+      order: expected.order,
+      days: [...expected.days],
+      estimatedMinutes: frontmatterNumber(sourceFor(expected.file), 'estimatedMinutes'),
+      prerequisites: [...expected.prerequisites],
+    }));
+    expect(validateLessonDurations(lessons)).toEqual([]);
   });
 
   it('has a valid quiz for each required lesson and no quiz for a removed lesson', () => {

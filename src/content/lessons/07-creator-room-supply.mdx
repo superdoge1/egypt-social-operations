@@ -5,7 +5,7 @@ description: 用招募、排班、房间质检与分层框架建立可复用的 
 phase: 经营系统
 order: 7
 days: [18, 19, 20]
-estimatedMinutes: 75
+estimatedMinutes: 180
 prerequisites: [growth-relationship-retention]
 outcomes: [供给运营手册, 房间质检表, 主播分层框架]
 sourceLinks:
@@ -18,6 +18,55 @@ artifacts:
   - { title: 主播分层框架, description: 按可观察服务质量与安全表现分层的框架，规则和门槛留待内部批准。, visibility: internal }
 ---
 
-## 课程正文将在 Stage B/C 完成
+## 01｜把供给当成服务系统
 
-Stage A 先锁定课程 manifest、来源元数据、证据产物和依赖关系；完整教学正文、每日冲刺和测验解释将在后续阶段补齐。
+`Host supply` 不是一张主播名单，而是一套让用户在正确时间遇到可靠房间的服务系统。用四个层次观察：host 能否理解主题和工具，room 能否按排班出现，guild/agency 是否提供招募与支持，运营/agent 能否处理培训、质量和升级。每一层都要有可观察事件，例如完成 onboarding、按时开播、房间有明确话题、用户知道怎样参与、风险能被报告。
+
+冷启动先问“哪种供给足以让一位新用户获得回应”，再问如何扩大规模。音乐、喜剧、足球、游戏、trivia、storytelling、城市或大学兴趣都只是 Egypt 的主题假设。不要把“主播多”当成 liquidity，也不要把公开商店出现 `hosts` 写成对 SUGO 招募政策、cash-out、agency commission 或分层门槛的证明。
+
+## 02｜给每条供给结论贴证据标签
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO 公共商店页展示 group voice rooms、hosts、gifts、medals 等可见表面；Platform Guidelines 说明主播和房间行为需要遵守平台规则。 |
+| 内部数据待验证 | Egypt 的有效 host 数、排班可靠性、room fill、用户回应时间、主播留存、分层表现和任何结算数据均需内部取数；本课不填结果或费率。 |
+| 访谈待交叉验证 | 访谈 host、guild/agency、room ops、support 和用户，核对招募来源、培训、排班、质量反馈与安全升级；不同角色的说法必须分别记录。 |
+| 运营假设 | 先播出少量主题清晰、排班可靠且有安全支持的房间，可能比同时开放大量空房更能降低 cold-start 摩擦；需要分层实验。 |
+
+## 03｜设计 Egypt 的供给运营回路
+
+用 `recruit → onboard → schedule → observe → coach → escalate → review` 作为一条可重复回路。招募文案要说清任务、时间、行为规则和支持方式，不承诺未验证的收入或提现。入职阶段检查年龄与规则理解、语言能力、设备和网络可用性；排班阶段记录时区和替班；观察阶段只收集达到目的所需的聚合质量信号。
+
+房间质检同时看内容和安全：主题是否清晰、欢迎语是否可懂、首次互动是否容易发生、报告入口是否可见、是否出现骚扰或诱导风险。对女性安全、Arabic/Arabizi moderation、未成年人风险等问题，供给手册必须链接到 trust & safety 的升级路径，而不是交给主播自行判断。
+
+## 04｜Daily sprint · Days 18–20
+
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 18</td><td>10 分钟概念 / 15 分钟主源阅读（SUGO listing + Platform Guidelines）/ 25 分钟拆解招募到复盘回路 / 10 分钟测验与证据更新</td><td><code>供给运营手册 v0</code>：招募、入职、排班、培训、支持、升级和复盘各有一项检查点。</td></tr>
+    <tr><td>Day 19</td><td>45 分钟访谈（host、guild/agency 或 room ops）/ 15 分钟整理与差异标注</td><td><code>供给访谈主题卡</code>：记录一条排班摩擦、一条质量反馈和一条待验证的组织关系。</td></tr>
+    <tr><td>Day 20</td><td>10 分钟概念 / 15 分钟主源阅读（Terms）/ 25 分钟对公开房间表面做质检演练 / 10 分钟测验与证据更新</td><td><code>房间质检表 v0</code> 与 <code>主播分层框架 v0</code>，分层规则只写可观察行为和待批准字段。</td></tr>
+  </tbody>
+</table>
+
+## 05｜现场任务：从供给侧事实开始访谈
+
+让受访者描述最近一次招募、排班或开播的实际步骤，而不是请其评价“理想系统”。追问：什么时候知道房间主题？谁负责替班？用户提出不适内容时怎样升级？哪些工具或语言支持缺失？如果受访者属于 guild/agency，只记录职责边界和主题，不记录组织名称、账号或合同条款。
+
+做一次公开表面走查时，使用合法可访问的页面和空白测试身份；不绕过年龄/地区限制、不私聊陌生人、不保存头像、昵称、联系方式或可识别房间内容。把每个摩擦点写入手册的 `observed / inferred / unknown` 栏，并为风险点指定 trust & safety owner。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+供给运营手册：阶段 | 负责人 | 输入 | 可观察完成条件 | safety/support 入口 | 未验证机制 | 复盘日
+房间质检表：房间主题 | 排班/替班 | 首次互动入口 | 语言 | 规则提醒 | 报告入口 | 结果与升级
+主播分层框架：可观察行为 | 证据窗口 | 质量层级 | 培训动作 | 升级条件 | 待批准规则
+```
+
+检查清单：
+
+- 不把主播数量、评论或公开文案写成内部 host 规模、留存、收入、提现或佣金事实。
+- 供给分层只使用经批准的聚合信号；不放真实账号、联系方式、合同、个案或私链。
+- 排班、房间质量、用户体验和安全升级在同一条回路上，Arabic/Arabizi 需求有 native/support owner。
+- 每个未验证机制都写成数据请求或访谈问题，不能用运营直觉填空。

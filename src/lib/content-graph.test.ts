@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateDayCoverage, validateLessonGraph, validateQuizCoverage } from './content-graph';
+import { validateDayCoverage, validateLessonDurations, validateLessonGraph, validateQuizCoverage } from './content-graph';
 
 const lesson = (id: string, order: number, prerequisites: string[] = []) => ({ id, order, prerequisites });
 const curriculum = () => Array.from({ length: 11 }, (_, index) => lesson(`lesson-${index + 1}`, index + 1, index === 0 ? [] : [`lesson-${index}`]));
@@ -104,5 +104,16 @@ describe('validateDayCoverage', () => {
       'Sprint days must cover 1 to 30 exactly; missing: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30',
       'Sprint day coverage must contain exactly 30 days; found 2',
     ]));
+  });
+});
+
+describe('validateLessonDurations', () => {
+  it('requires sixty minutes for each declared sprint day', () => {
+    expect(validateLessonDurations([
+      { ...lesson('match', 1), days: [1, 2], estimatedMinutes: 120 },
+      { ...lesson('mismatch', 2), days: [3, 4, 5], estimatedMinutes: 75 },
+    ])).toEqual([
+      'Lesson mismatch must allocate 180 minutes for 3 sprint days; found 75',
+    ]);
   });
 });

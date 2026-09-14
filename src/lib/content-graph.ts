@@ -2,6 +2,7 @@ export interface LessonNode {
   id: string;
   order: number;
   days?: number[];
+  estimatedMinutes?: number;
   prerequisites: string[];
 }
 
@@ -126,6 +127,20 @@ export function validateDayCoverage(lessons: LessonNode[]): string[] {
   const missingDays = Array.from({ length: 30 }, (_, index) => index + 1).filter((day) => !dayCounts.has(day));
   if (missingDays.length) errors.push(`Sprint days must cover 1 to 30 exactly; missing: ${missingDays.join(', ')}`);
   if (dayCounts.size !== 30) errors.push(`Sprint day coverage must contain exactly 30 days; found ${dayCounts.size}`);
+
+  return errors;
+}
+
+export function validateLessonDurations(lessons: LessonNode[]): string[] {
+  const errors: string[] = [];
+
+  for (const lesson of lessons) {
+    if (!lesson.days?.length || lesson.estimatedMinutes === undefined) continue;
+    const expectedMinutes = lesson.days.length * 60;
+    if (lesson.estimatedMinutes !== expectedMinutes) {
+      errors.push(`Lesson ${lesson.id} must allocate ${expectedMinutes} minutes for ${lesson.days.length} sprint days; found ${lesson.estimatedMinutes}`);
+    }
+  }
 
   return errors;
 }

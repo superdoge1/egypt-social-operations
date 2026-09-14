@@ -3,12 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProgressPanel from '../components/ProgressPanel.astro';
 import LessonCard from '../components/LessonCard.astro';
-import { validateLessonGraph, validateQuizCoverage } from '../lib/content-graph';
+import { validateDayCoverage, validateLessonDurations, validateLessonGraph, validateQuizCoverage } from '../lib/content-graph';
 import { quizzes } from '../data/quizzes';
 import { withBase } from '../lib/urls';
 const lessons=(await getCollection('lessons')).sort((a,b)=>a.data.order-b.data.order);
-const curriculum=lessons.map(({data})=>({id:data.id,order:data.order,prerequisites:data.prerequisites}));
-const graphErrors=[...validateLessonGraph(curriculum),...validateQuizCoverage(curriculum, quizzes)];
+const curriculum=lessons.map(({data})=>({id:data.id,order:data.order,days:data.days,estimatedMinutes:data.estimatedMinutes,prerequisites:data.prerequisites}));
+const graphErrors=[...validateLessonGraph(curriculum),...validateDayCoverage(curriculum),...validateLessonDurations(curriculum),...validateQuizCoverage(curriculum, quizzes)];
 if(graphErrors.length) throw new Error(`Invalid curriculum:\n${graphErrors.join('\n')}`);
 const lessonIds=lessons.map(({data})=>data.id);
 ---
