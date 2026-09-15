@@ -10,9 +10,10 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "test": "vitest run src",
+    "test:metadata": "node scripts/check-metadata.mjs",
     "test:watch": "vitest src",
     "test:e2e": "playwright test",
-    "verify": "npm run check && npm run test && npm run test:e2e && npm run build",
+    "verify": "npm run check && npm run test && npm run test:e2e && npm run build && npm run test:metadata",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "astro": "astro"
   },

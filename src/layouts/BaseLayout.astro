@@ -5,9 +5,10 @@ import { withBase } from '../lib/urls';
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean;
 }
 
-const { title, description = '面向埃及 SUGO 客户运营的公开证据学习场。' } = Astro.props;
+const { title, description = '面向埃及 SUGO 客户运营的公开证据学习场。', noindex = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const pageTitle = `${title} · Egypt Social Operations Fieldbook`;
@@ -25,13 +26,14 @@ const nav = [
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonicalUrl} />
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalUrl} />
+    {!noindex && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:site_name" content="Egypt Social Operations Fieldbook" />
     <meta property="og:locale" content="zh_CN" />
+    {noindex && <meta name="robots" content="noindex,follow" />}
     <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
     <title>{pageTitle}</title>
   </head>
