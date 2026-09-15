@@ -12,7 +12,10 @@ const { lessonIds, storageKey } = Astro.props;
     <div class="progress-track" role="progressbar" aria-label="课程完成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-progress-fill></span></div>
     <span class="progress-caption mono">ROUTE COMPLETION</span>
   </div>
-  <button class="text-button" type="button" data-reset-progress>重置进度</button>
+  <div class="progress-actions">
+    <button class="text-button" type="button" data-reset-progress>重置进度</button>
+    <p class="storage-limitation" data-storage-limitation role="status" hidden>本机存储不可用；进度仅保留在当前页面。</p>
+  </div>
 </section>
 <script>
   import { calculateProgress, clearStoredProgress, readStoredProgress } from '../lib/progress';
@@ -20,7 +23,10 @@ const { lessonIds, storageKey } = Astro.props;
     const key = panel.dataset.storageKey ?? '';
     const ids = JSON.parse(panel.dataset.lessons ?? '[]') as string[];
     let storage: Storage | null = null;
-    try { storage = window.localStorage; } catch { /* Render an empty progress state. */ }
+    let storageIssue = false;
+    try { storage = window.localStorage; } catch { storageIssue = true; }
+    const resetButton = panel.querySelector<HTMLButtonElement>('[data-reset-progress]');
+    const limitation = panel.querySelector<HTMLElement>('[data-storage-limitation]');
     const render = () => {
       const state = storage ? readStoredProgress(storage, key, ids) : { completedLessonIds: [] };
       const value = calculateProgress(state.completedLessonIds, ids);
@@ -32,10 +38,15 @@ const { lessonIds, storageKey } = Astro.props;
       if (percentage) percentage.textContent = `${value.percentage}%`;
       if (track) track.setAttribute('aria-valuenow', String(value.percentage));
       if (fill) fill.style.width = `${value.percentage}%`;
+      if (resetButton) resetButton.disabled = !storage;
+      if (limitation) {
+        limitation.hidden = !storageIssue;
+        limitation.textContent = storage ? '浏览器未能清除本机进度；原有数据保持不变。' : '本机存储不可用；进度仅保留在当前页面。';
+      }
     };
-    panel.querySelector('[data-reset-progress]')?.addEventListener('click', () => {
+    resetButton?.addEventListener('click', () => {
       if (window.confirm('清除本机保存的全部课程进度、分数和笔记？')) {
-        if (storage) clearStoredProgress(storage, key);
+        if (storage && !clearStoredProgress(storage, key)) storageIssue = true;
         window.dispatchEvent(new CustomEvent('learning-progress-changed'));
       }
     });

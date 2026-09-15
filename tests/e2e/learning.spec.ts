@@ -143,6 +143,56 @@ test.describe('Cairo Signal Atlas design contracts', () => {
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
     }
   });
+
+  test('makes every daily sprint table a named keyboard-focusable local scroller on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const lessonId of lessonRoutes) {
+      await page.goto(`./learn/${lessonId}/`);
+      const table = page.locator('table[data-daily-sprint]');
+      const wrapper = table.locator('xpath=..');
+      await expect(wrapper).toHaveAttribute('role', 'region');
+      await expect(wrapper).toHaveAttribute('tabindex', '0');
+      await expect(wrapper).toHaveAttribute('aria-label', /Day \d+–\d+ 学习冲刺表/);
+      expect(await wrapper.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+      expect(await table.evaluate((element) => element.tagName)).toBe('TABLE');
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  });
+
+  test('keeps local progress controls honest when browser storage is unavailable', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', { configurable: true, get: () => { throw new Error('blocked'); } });
+    });
+    await page.goto('./');
+    await expect(page.locator('[data-storage-limitation]')).toBeVisible();
+    await expect(page.locator('[data-reset-progress]')).toBeDisabled();
+  });
+
+  test('reports a failed local progress reset without losing the page', async ({ page }) => {
+    await page.goto('./');
+    await page.evaluate(() => {
+      Storage.prototype.removeItem = () => { throw new DOMException('blocked', 'SecurityError'); };
+    });
+    page.on('dialog', (dialog) => dialog.accept());
+    await page.locator('[data-reset-progress]').click();
+    await expect(page.locator('[data-storage-limitation]')).toBeVisible();
+  });
+
+  test('keeps mobile navigation and page surfaces within the viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const route of ['./', './roadmap/', './projects/', './resources/', './404.html', './not-a-route/', './learn/social-entertainment-landscape/']) {
+      await page.goto(route);
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  });
+
+  test('uses the whole quiz label as the mobile touch target', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('./learn/social-entertainment-landscape/');
+    for (const label of await page.locator('.quiz-options label').all()) {
+      expect(await label.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    }
+  });
 });
 
 test('learning interface keeps its responsive contract', async ({ page }) => {

@@ -1,8 +1,8 @@
-# Vibe Coding Field Manual
+# Egypt Social Operations Fieldbook
 
-一套中文交互式学习站：先沿 Easy‑Vibe 的思路完成第一个 AI 产品，再进入上下文工程、Skills、MCP、单/多 Agent 协作、可靠性与安全。
+一套面向海外运营经理的公开、非官方学习站：用 30 天、11 节课程，把全球社交娱乐类别、SUGO 产品旅程、埃及市场语境与 Day 31–90 运营方案整理成可复核的证据包。
 
-在线站点：<https://superdoge1.github.io/vibe-coding/>
+在线站点：<https://superdoge1.github.io/egypt-social-operations/>
 
 ## 本地开发
 
@@ -15,10 +15,12 @@ npm run dev
 
 验证命令：`npm run check`、`npm test`、`npm run test:e2e`、`npm run build`。
 
-课程位于 `src/content/lessons/`，交互组件位于 `src/components/`，状态与课程依赖校验位于 `src/lib/`。学习进度使用 `vibeCodingLearningProgress.v1` 保存在浏览器本地，不上传数据。
+课程位于 `src/content/lessons/`，交互组件位于 `src/components/`，状态与课程依赖校验位于 `src/lib/`。学习进度使用 `egyptSocialOperationsProgress.v1` 保存在浏览器本地，不上传数据。
 
-## 来源与边界
+## 课程与证据边界
 
-课程参考 [Easy‑Vibe](https://github.com/datawhalechina/easy-vibe)、[Claude Code Best Practice](https://github.com/shanraisshan/claude-code-best-practice) 与相关官方文档。正文为重新组织的原创教学内容，不复制上游整库或大段文本。工具专属命令应回到对应官方文档核验。
+课程覆盖全球类别、SUGO 用户与供给生态、指标与虚拟经济、埃及数字市场、本地化、增长、供给、商业化风险、信任与安全、数据协作，以及 Day 31–90 方案。每节课保留公开资料、内部数据请求、访谈交叉验证和运营假设四类证据状态。
+
+公开页面只使用公开来源、原创摘要和空白模板；不放入公司机密、账号凭据、个人数据、可识别个案、内部指标、商业条款或私人链接。法律、税务、隐私、雇佣和监管内容仅作教育用途，投入运营前须由有权限的专业人士和内部 owner 复核。
 
 本站代码与原创内容按 [MIT License](LICENSE) 发布；外部链接内容遵循各自许可证。
