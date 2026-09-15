@@ -1,0 +1,30 @@
+{
+  "name": "egypt-social-operations",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "vitest run src",
+    "test:metadata": "node scripts/check-metadata.mjs",
+    "test:watch": "vitest src",
+    "test:e2e": "playwright test",
+    "verify": "npm run check && npm run test && npm run test:e2e && npm run build && npm run test:metadata",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.0.1",
+    "astro": "^7.3.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.62.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

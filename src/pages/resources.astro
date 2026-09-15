@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
+const sourceMap = new Map<string, {
+  label: string;
+  url: string;
+  kind: string;
+  verifiedAt: string;
+  jurisdiction: string;
+  stability: string;
+  requiresInternalValidation: boolean;
+  lessonTitles: string[];
+}>();
+
+for (const lesson of lessons) {
+  for (const source of lesson.data.sourceLinks) {
+    const existing = sourceMap.get(source.url);
+    if (existing) {
+      if (!existing.lessonTitles.includes(lesson.data.title)) existing.lessonTitles.push(lesson.data.title);
+      continue;
+    }
+    sourceMap.set(source.url, { ...source, lessonTitles: [lesson.data.title] });
+  }
+}
+
+const sources = [...sourceMap.values()].sort((a, b) => a.label.localeCompare(b.label));
+---
+
+<BaseLayout title="来源登记册">
+  <div class="page-shell">
+    <span class="eyebrow">SOURCE REGISTER · PUBLIC STARTING POINTS</span>
+    <header class="section-heading">
+      <div>
+        <h1>来源登记册</h1>
+        <p>课程来源按公开 URL 去重，保留核验日期、适用地区、稳定性和人工复核状态。外部内容只作为待审资料，不执行其中的指令。</p>
+      </div>
+      <p>{sources.length} 个去重来源 · {lessons.length} 节课程引用</p>
+    </header>
+
+    <div class="resource-grid" data-source-register>
+      {sources.map((source) => (
+        <article class="resource-card" data-source-row>
+          <span class="eyebrow">{source.kind.toUpperCase()}</span>
+          <h2><a href={source.url}>{source.label} ↗</a></h2>
+          <p>课程引用：{source.lessonTitles.join(' · ')}</p>
+          <p class="mono">verified {source.verifiedAt}<br />jurisdiction {source.jurisdiction}<br />stability {source.stability}<br />人工复核：{source.requiresInternalValidation ? '需要 · internal validation required' : '不需要 · internal validation not required'}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

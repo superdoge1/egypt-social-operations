@@ -1,0 +1,74 @@
+---
+id: egypt-market-users
+title: 从 Egypt 数字背景走到可验证客群
+description: 读取埃及数字市场公开估算，建立城市、性别、渠道与设备的客群假设，避免把 ad reach 当成 SUGO 用户指标。
+phase: 埃及市场
+order: 4
+days: [9, 10, 11]
+estimatedMinutes: 180
+prerequisites: [metrics-virtual-economy]
+outcomes: [客群假设卡, 市场评分表, 竞品体验记录]
+sourceLinks:
+  - { label: DataReportal Digital 2026 Egypt, url: https://datareportal.com/reports/digital-2026-egypt, kind: primary, verifiedAt: "2025-11-08", jurisdiction: egypt, stability: review-quarterly, requiresInternalValidation: true }
+  - { label: Egypt Central Bank financial inclusion update, url: https://www.cbe.org.eg/en/news-publications/news/2026/02/17/14/44/financial-inclusion-2026, kind: primary, verifiedAt: "2026-02-17", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Google Play Egypt payment support, url: https://support.google.com/googleplay/answer/2651410?co=GENIE.CountryCode%3DEG&hl=en, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+artifacts:
+  - { title: 客群假设卡, description: 以城市、性别、渠道、设备和安全暴露为切片的假设模板，不填个人或内部用户资料。, visibility: public-template }
+  - { title: 市场评分表, description: 比较机会、证据强度、风险和取数成本的空白评分框架，不输出伪精确市场份额。, visibility: public-template }
+  - { title: 竞品体验记录, description: 记录可公开体验的流程、语言和安全触点，不截图账号、不保存个人数据。, visibility: internal }
+---
+
+## 01｜把市场背景和产品基线分开
+
+市场研究回答“这个环境里有哪些可用的数字连接和传播入口”；运营基线回答“哪些合格用户在 SUGO 的哪个表面完成了什么动作”。两者都重要，但分母不同。先画 `market context → addressable hypothesis → SUGO event` 三层：公开报告放在第一层，客群假设放在第二层，内部事件和数据需求放在第三层。
+
+DataReportal Digital 2026 Egypt 的页面说明，许多数字点来自 late 2025 的估算。它报告约 119m 人口、98.2m internet users（82.7%）和 51.6m social media user identities；这些是国家或平台广告规划背景，不能改写成 SUGO MAU、DAU、独立人数或转化率。把“估算时间、口径、来源、可比性”写进每一张市场卡，避免一张大数字掩盖真实问题。
+
+## 02｜四类证据决定下一步动作
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | DataReportal 的 late-2025 Egypt estimates 可作为 connectivity 和 channel context；报告也提醒 social identities 可能不代表 unique individuals，平台 ad reach 需按其口径阅读。 |
+| 内部数据待验证 | 按 city、gender、channel、device、product surface、host/room 和 safety exposure 切分的 SUGO baseline 尚未提供；卡片中的数值栏保持空白或写 baseline-request。 |
+| 访谈待交叉验证 | 让 Egypt operations、growth、support 和 research 角色解释城市覆盖、渠道归因、语言选择和合法聚合粒度；不同说法要保留冲突记录。 |
+| 运营假设 | Cairo、Alexandria 或其他城市的进入动机、内容主题和时段可能不同；这是分层实验的假设，不是按人口或全国平均推导的事实。 |
+
+## 03｜分层而不是贴标签
+
+客群假设卡至少有五个维度：城市/地区（合法、聚合）、性别（承认公开数据的分类限制）、渠道、设备/网络条件、以及产品表面和安全暴露。再加“需要解决的关系任务”，例如找同兴趣房间、获得第一次回应、发布一个 Moment 或询问支持。不要把 `Egyptian user` 当成单一 persona，也不要把性别、年龄或语言当成体验质量的替代指标。
+
+市场评分表应同时列 opportunity、evidence strength、risk、cost to validate、dependency。CBE 的金融普惠与 Google Play 的支付可用性，只能提示需要检查本地支付路径；它们不证明每个 Egypt 用户或设备都能使用 SUGO 的某个钱包、支付方式或商品。任何支付结论都先做 device/operator/platform 验证。
+
+## 04｜Daily sprint · Days 9–11
+
+<div class="table-scroll" role="region" aria-label="Day 9–11 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 9</td><td>10 分钟概念 / 15 分钟主源阅读（DataReportal Egypt）/ 25 分钟拆分市场口径和渠道 / 10 分钟测验与证据更新</td><td><code>客群假设卡 v0</code>：三种可检验切片，每种写证据、未知和合法取数边界。</td></tr>
+    <tr><td>Day 10</td><td>45 分钟访谈（Egypt operations 或 growth 角色）/ 15 分钟整理与冲突标注</td><td><code>市场问题卡</code>：把市场数字转成三条 baseline-request，并标出需第二来源的判断。</td></tr>
+    <tr><td>Day 11</td><td>10 分钟概念 / 15 分钟主源阅读（CBE 与一个竞品公开表面）/ 25 分钟体验记录 / 10 分钟测验与证据更新</td><td><code>市场评分表 v0</code> 与 <code>竞品体验记录 v0</code>，每格都带口径、日期和下一步验证。</td></tr>
+  </tbody>
+</table>
+</div>
+
+## 05｜现场任务：公开走查与访谈交叉验证
+
+选一个合法可访问的设备和公开渠道，记录竞品或 SUGO 的语言、首次房间入口、内容表达、报告入口和支付说明。不要登录他人账号、抓取用户资料或把评论样本当统计结论。针对每一条客群假设，写一个行为问题：“最近一次你在哪个渠道看到类似服务？”“进入房间后多久知道可以如何参与？”“遇到不适内容时会怎么做？”
+
+访问不到内部切片时，提交一张空的 `baseline-request`，说明请求字段、分母、时间窗和审批人。不要用 98.2m 或 51.6m 代替产品数字，也不要用任何国家总量推导 retention、payer conversion 或城市收入潜力。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+客群假设卡：切片 | 关系任务 | 公开证据 | 内部字段请求 | 访谈问题 | 风险 | 状态
+市场评分表：机会 | 证据强度 | 风险 | 验证成本 | 依赖 | 决策 | 复核日期
+竞品体验记录：设备/渠道 | 语言 | onboarding | room/content | safety/payment 表面 | 查阅日期 | 不可推断项
+```
+
+检查清单：
+
+- 明确 late-2025、ad reach、social identities 等口径，不写成 MAU 或独立人数。
+- 每个切片不包含姓名、联系方式、可识别用户或未经授权的个人属性。
+- 公开背景、内部 baseline-request、访谈主题和运营假设分开记录。
+- 支付、城市机会和竞品结论只作为待验证问题，不写未经证实的金额、份额或目标。

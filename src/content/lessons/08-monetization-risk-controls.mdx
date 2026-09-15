@@ -1,0 +1,75 @@
+---
+id: monetization-risk-controls
+title: 在商业化增长前设好付费护栏
+description: 识别 virtual gifts、应用商店支付、退款与 chargeback 的公开边界，把 coin 比例、付费聊天和 cash-out 机制留作内部核实。
+phase: 经营系统
+order: 8
+days: [21, 22]
+estimatedMinutes: 120
+prerequisites: [creator-room-supply]
+outcomes: [商业化诊断, 付费护栏, 反作弊信号表]
+sourceLinks:
+  - { label: SUGO Google Play 产品页, url: https://play.google.com/store/apps/details?id=com.voicemaker.android&hl=en_US, kind: primary, verifiedAt: "2026-09-10", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Google Play billing policy, url: https://support.google.com/googleplay/android-developer/answer/9858738?hl=en, kind: primary, verifiedAt: "2026-09-14", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Apple App Store Review Guidelines, url: https://developer.apple.com/app-store/review/guidelines/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: CBE financial inclusion update, url: https://www.cbe.org.eg/en/news-publications/news/2026/02/17/14/44/financial-inclusion-2026, kind: primary, verifiedAt: "2026-02-17", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Google Play Egypt payment support, url: https://support.google.com/googleplay/answer/2651410?co=GENIE.CountryCode%3DEG&hl=en, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+artifacts:
+  - { title: 商业化诊断, description: 连接商品、支付、退款、chargeback 和价值感知的空白诊断，不填内部价格或收入。, visibility: internal }
+  - { title: 付费护栏, description: 记录支付合规、退款、风险暴露、支持路径和停止条件的受控模板。, visibility: restricted }
+  - { title: 反作弊信号表, description: 记录异常集中度、退款、设备和关系信号的信号定义，不含真实账号或个案。, visibility: restricted }
+---
+
+## 01｜先画价值交换，再讨论收入
+
+`Monetization` 课程先研究用户为什么愿意表达支持、获得身份反馈或参与关系，而不是先填 revenue 表。SUGO 的公开商店页面显示 in-app purchases、gifts、medals/status effects 等表面；这可以成为 `virtual goods` 的观察入口。用户收到的价值、支付确认、退款、客服和安全保护必须连成一条 journey，任何一步不清楚都可能伤害信任。
+
+用三类角色检查风险：payer 需要清晰价格、确认和退款路径；recipient/host 需要知道规则和支持边界；运营和风控需要能看到异常关系、退款/chargeback 与争议。公开页面不会告诉我们 coin/diamond ratio、付费聊天机制、host cash-out、agency commission、价格版本或内部收入。它们必须保持 `internal unknown`。
+
+## 02｜商业化结论必须分层
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | Google Play/Apple 的政策要求数字商品使用相应的 in-app billing，并要求 UGC 产品提供报告与治理能力；CBE 的金融普惠信息和 Google Play 的 Egypt 支持页提供支付背景入口。 |
+| 内部数据待验证 | payer conversion、收入、退款、chargeback、商品价格、地区/设备路径、coin/diamond 规则和 host/guild 结算均需要内部数据与审批；不写任何当前数值。 |
+| 访谈待交叉验证 | 访谈 payment/support/finance/risk 与用户，核对支付成功、失败、退款和争议的真实路径；不要索取卡号、交易号、账单截图或账号。 |
+| 运营假设 | 先让价格、收据、退款和报告入口可理解，再观察支付意愿，可能比用高压消息推动购买更能保护长期关系；需要实验和安全复盘。 |
+
+## 03｜把付费护栏做成可审计的信号链
+
+商业化诊断按 `offer → confirm → deliver → support → refund/chargeback → review` 记录事件。每个事件写清用户可见反馈、责任人、允许的撤销动作和证据留存边界。反作弊信号只作为需要复核的线索，例如短时间异常退款、关系或设备集中、重复模式、争议与礼物行为不一致；信号不是自动定罪，也不应暴露检测规则给可疑行为者。
+
+支付路径要按 platform、device、operator 和当地可用方法逐一验证。CBE 的广义金融普惠指标不能证明每个用户都能使用某个 wallet；Google Play 的支付支持也不是 SUGO 商品路径的证明。出现不一致时先暂停实验，交给 payment、support、trust & safety 和合规负责人复核。
+
+## 04｜Daily sprint · Days 21–22
+
+<div class="table-scroll" role="region" aria-label="Day 21–22 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 21</td><td>10 分钟概念 / 15 分钟主源阅读（SUGO listing + Apple/Google policy）/ 25 分钟画 value exchange 与风险信号 / 10 分钟测验与证据更新</td><td><code>商业化诊断 v0</code>：商品、支付、交付、支持、退款和 chargeback 各有证据状态。</td></tr>
+    <tr><td>Day 22</td><td>45 分钟访谈（support、payment 或 risk 角色）/ 15 分钟整理与风险标注</td><td><code>付费护栏 v0</code> 与 <code>反作弊信号表 v0</code>，每个信号都有人工复核、误伤检查和停止条件。</td></tr>
+  </tbody>
+</table>
+</div>
+
+## 05｜现场任务：沿一笔匿名支付路径提问
+
+只使用文档或经过授权的测试环境，让受访者逐步说明“看见什么、确认什么、失败后去哪、退款如何开始、谁能处理”。对每一个步骤写用户可见证据、内部需要的事件和仍未知的字段。绝不要求银行卡信息、收据号码、真实账号、个人资料或未授权订单。
+
+将“购买意愿”与“安全感”分开：访谈用户是否理解价格、收到商品、知道如何退款和报告不当诱导；访谈 support 是否能区分技术失败、争议和疑似 collusion。没有内部数据时，把 baseline 和任何 target 栏写 `pending`，不从应用商店评论或国家支付背景编造结果。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+商业化诊断：用户价值 | 商品表面 | billing 事件 | 交付/支持 | refund/chargeback | 当前证据 | unknown
+付费护栏：场景 | 用户确认 | 平台要求 | 可撤销动作 | safety guardrail | owner | stop condition
+反作弊信号表：信号 | 可能解释 | 需要的证据 | 人工复核 | 误伤检查 | 升级 | 复核日
+```
+
+检查清单：
+
+- coin/diamond 比例、付费聊天机制、host cash-out、agency commission 和收入保持空白或 pending。
+- 不把应用商店 billing 政策、CBE 背景或用户评论写成 SUGO 实际支付成功率。
+- 反作弊信号只触发复核，不自动替代申诉或安全判断；避免公开敏感检测细节。
+- 不保存银行卡、交易号、账号、个人资料、私链或真实订单内容；所有法律/合规判断交给专业与内部 owner。

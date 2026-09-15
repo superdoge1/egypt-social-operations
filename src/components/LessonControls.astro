@@ -1,0 +1,113 @@
+---
+import type { LessonQuiz } from '../data/quizzes';
+interface Props { lessonId: string; lessonIds: string[]; storageKey: string; quiz: LessonQuiz; }
+const { lessonId, lessonIds, storageKey, quiz } = Astro.props;
+---
+<aside class="lesson-controls" data-evidence-desk data-lesson-controls data-lesson-id={lessonId} data-lessons={JSON.stringify(lessonIds)} data-storage-key={storageKey} data-answers={JSON.stringify(quiz.answers)} aria-busy="true">
+  <header class="inspector-header">
+    <span class="mono">EVIDENCE DESK</span>
+    <span class="inspector-status"><i aria-hidden="true"></i> LOCAL STATE</span>
+  </header>
+  <section>
+    <span class="eyebrow">KNOWLEDGE CHECK</span>
+    <h2 id={`quiz-prompt-${lessonId}`}>{quiz.prompt}</h2>
+    <div class="quiz-options" role="group" aria-labelledby={`quiz-prompt-${lessonId}`}>
+      {quiz.options.map((option) => <label><input type="checkbox" name={`quiz-${lessonId}`} value={option.value} disabled /> <span>{option.label}</span></label>)}
+    </div>
+    <button class="button secondary" type="button" data-check-quiz disabled>检查答案</button>
+    <p class="quiz-feedback" data-quiz-feedback aria-live="polite"></p>
+    <p class="explanation" hidden data-quiz-explanation>{quiz.explanation}</p>
+  </section>
+  <section>
+    <label class="note-label" for={`notes-${lessonId}`}>学习笔记 <span>仅保存在这台设备</span></label>
+    <p class="save-status note-warning" data-note-warning role="note">请勿填写公司机密、账号凭据、个人数据或可识别个案。</p>
+    <textarea id={`notes-${lessonId}`} data-notes rows="6" placeholder="写下你的决策、疑问或下一次实验……" disabled></textarea>
+    <p class="save-status" data-save-status aria-live="polite">尚未保存</p>
+    <p class="storage-limitation" data-lesson-storage-limitation role="status" hidden>本机存储不可用；本页关闭后会丢失，原有本机数据不会被覆盖。</p>
+  </section>
+  <button class="button complete" type="button" data-complete-lesson disabled>标记本节完成</button>
+</aside>
+<script>
+  import { createEmptyProgress, readStoredProgress, saveStoredProgress, scoreQuiz, type ProgressState } from '../lib/progress';
+  document.querySelectorAll<HTMLElement>('[data-lesson-controls]').forEach((root) => {
+    const key = root.dataset.storageKey ?? '';
+    const lessonId = root.dataset.lessonId ?? '';
+    const ids = JSON.parse(root.dataset.lessons ?? '[]') as string[];
+    const answers = JSON.parse(root.dataset.answers ?? '[]') as string[];
+    const note = root.querySelector<HTMLTextAreaElement>('[data-notes]');
+    const complete = root.querySelector<HTMLButtonElement>('[data-complete-lesson]');
+    const status = root.querySelector<HTMLElement>('[data-save-status]');
+    const limitation = root.querySelector<HTMLElement>('[data-lesson-storage-limitation]');
+    let storage: Storage | null = null;
+    let storageIssue = false;
+    try {
+      storage = window.localStorage;
+      storage.getItem(key);
+    } catch {
+      storage = null;
+      storageIssue = true;
+    }
+    let volatileState: ProgressState | null = null;
+    const read = () => volatileState ?? (storage ? readStoredProgress(storage, key, ids) : createEmptyProgress());
+    const write = (state: ProgressState) => {
+      state.updatedAt = new Date().toISOString();
+      const stored = storage ? saveStoredProgress(storage, key, state) : false;
+      volatileState = stored ? null : state;
+      if (!stored) storageIssue = true;
+      if (status) status.textContent = stored ? '已保存到本机' : storage ? '浏览器未能保存；本页关闭后会丢失' : '本机存储不可用；本页关闭后会丢失';
+      window.dispatchEvent(new CustomEvent('learning-progress-changed'));
+    };
+    const render = () => {
+      const state = read();
+      if (note && document.activeElement !== note) {
+        note.value = state.notes[lessonId] ?? '';
+        if (status && !volatileState && Object.hasOwn(state.notes, lessonId)) status.textContent = '已保存到本机';
+      }
+      const savedScore = state.quizScores[lessonId];
+      const feedback = root.querySelector<HTMLElement>('[data-quiz-feedback]');
+      const explanation = root.querySelector<HTMLElement>('[data-quiz-explanation]');
+      if (savedScore) {
+        if (feedback) feedback.textContent = `已保存答题结果：答对 ${savedScore.score} / ${savedScore.total}。选项勾选不会恢复。`;
+        if (explanation) explanation.hidden = savedScore.score !== savedScore.total;
+      }
+      if (limitation) limitation.hidden = !storageIssue;
+      if (status && storageIssue && !volatileState) status.textContent = '本机存储不可用；本页关闭后会丢失';
+      const done = state.completedLessonIds.includes(lessonId);
+      if (complete) {
+        complete.textContent = done ? '已完成 · 点击撤销' : '标记本节完成';
+        complete.classList.toggle('is-done', done);
+      }
+    };
+    root.querySelector('[data-check-quiz]')?.addEventListener('click', () => {
+      const selected = [...root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')].map((input) => input.value);
+      const correct = scoreQuiz(selected, answers);
+      const feedback = root.querySelector<HTMLElement>('[data-quiz-feedback]');
+      const explanation = root.querySelector<HTMLElement>('[data-quiz-explanation]');
+      if (feedback) feedback.textContent = correct ? '正确。把证据分层带进下一次 Egypt 运营复盘。' : '还差一步。重新检查所有选项。';
+      if (explanation) explanation.hidden = !correct;
+      const state = read();
+      state.quizScores[lessonId] = { score: correct ? 1 : 0, total: 1, answeredAt: new Date().toISOString() };
+      write(state);
+    });
+    note?.addEventListener('input', () => {
+      const state = read();
+      state.notes[lessonId] = note.value;
+      write(state);
+    });
+    complete?.addEventListener('click', () => {
+      const state = read();
+      state.completedLessonIds = state.completedLessonIds.includes(lessonId)
+        ? state.completedLessonIds.filter((id) => id !== lessonId)
+        : [...state.completedLessonIds, lessonId];
+      write(state);
+      render();
+    });
+    window.addEventListener('learning-progress-changed', render);
+    render();
+    root.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement>('input, textarea, button').forEach((control) => {
+      control.disabled = false;
+    });
+    root.dataset.ready = 'true';
+    root.removeAttribute('aria-busy');
+  });
+</script>

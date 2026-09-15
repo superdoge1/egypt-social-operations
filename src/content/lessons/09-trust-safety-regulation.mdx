@@ -1,0 +1,82 @@
+---
+id: trust-safety-regulation
+title: 把信任、安全与合规放进运营系统
+description: 用公开条款、隐私政策、平台指南与埃及监管入口建立风险登记、升级矩阵和事件响应骨架。
+phase: 经营系统
+order: 9
+days: [23, 24, 25]
+estimatedMinutes: 180
+prerequisites: [monetization-risk-controls]
+outcomes: [风险登记册, 升级矩阵, 事件响应清单]
+sourceLinks:
+  - { label: SUGO Terms and Conditions, url: https://www.voicemaker.media/terms.html, kind: primary, verifiedAt: "2024-12-30", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: SUGO Privacy Policy, url: https://www.voicemaker.media/privacy.html, kind: primary, verifiedAt: "2024-12-30", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: SUGO Platform Guidelines, url: https://www.sugo.com/platform-guidelines.html, kind: primary, verifiedAt: "2026-09-14", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Egypt Personal Data Protection Center, url: https://www.pdpc.gov.eg/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Egypt Supreme Council for Media Regulation source material, url: https://scm.gov.eg/%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D9%85%D8%AC%D9%84%D8%B3/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+artifacts:
+  - { title: 风险登记册, description: 记录风险、证据、严重度、负责人、缓解与复盘的空白登记，不存真实事件。, visibility: restricted }
+  - { title: 升级矩阵, description: 以 child safety、harassment、scam、privacy 等类别定义升级入口和时限，法律适用留待专业意见。, visibility: restricted }
+  - { title: 事件响应清单, description: 覆盖识别、保全、处置、通知、申诉和复盘的演练模板，不含个案细节或私人联系方式。, visibility: restricted }
+---
+
+## 01｜把信任与安全做成经营基础设施
+
+`Trust & safety` 不只是删内容。用户要能理解年龄门槛、隐私和行为规则，知道如何报告骚扰、诈骗、剥削或未成年人风险；host 和 support 要有明确的升级入口；运营要能保全证据、限制暴露、处理申诉并复盘。把它放进 acquisition、room、1:1、Moments、billing 和 reactivation 的每一条旅程，安全信号才能和增长、留存一起被看见。
+
+风险登记以 `harm → exposure → detect → triage → action → appeal → learn` 为骨架。严重度不是“我觉得不舒服”的排序，而是依据经批准的风险政策和当地专业意见。课程只提供教育框架，不给 Egypt 的法律结论；法律、隐私、税务、雇佣和监管问题必须转交有权限的专业人士。
+
+## 02｜公开规则是起点，不是内部绩效证明
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO Terms 公开 18 岁或当地成年年龄门槛并禁止骚扰、剥削、性服务、诈骗、仇恨和其他滥用；Privacy Policy 描述资料、UGC、语音视频、交易、设备/位置处理、服务商共享、删除和跨境存储主题；Platform Guidelines 描述报告、警告、限制、封禁、申诉和回溯执行的公开入口。 |
+| 内部数据待验证 | 报告量、moderation precision/recall、appeal SLA、处置时长、safety churn、误伤率和员工覆盖均未在本课设定；不能写成平台表现。 |
+| 访谈待交叉验证 | 与 support、moderation、legal/compliance、host 和用户核对语言覆盖、升级时限、证据保存、申诉和通知路径；不要记录个案原文或身份。 |
+| 运营假设 | Arabic/Arabizi 的审核与女性安全需要产品、人员和 escalation design 一起建设，仅改投放文案不足以降低风险。 |
+
+## 03｜读懂 Egypt 的监管入口与事件流程
+
+PDPC 公开介绍 Law 151/2020 与 Executive Regulations 816/2025 的数据保护框架，并提供许可、咨询、权利和合规信息入口；SCMR 公开媒体监管资料。它们告诉我们应建立 review queue 和 local advice 问题，不代表 SUGO 的具体业务已完成许可，也不替代书面法律意见。Privacy Policy 中的跨境存储、服务商共享和删除主题，应转成 data map、retention question 和审批 owner。
+
+事件流程建议分五步：
+
+1. **识别与分级**：记录风险类别、暴露面、时间和最小必要证据。
+2. **保全与隔离**：按权限保存证据，先减少继续伤害的可能，不扩散原文。
+3. **升级与处置**：按 matrix 交给 safety、support、legal/compliance 或必要的外部机构。
+4. **申诉与通知**：保留用户可理解的渠道和审核记录，遵守适用规则。
+5. **复盘与修正**：用聚合主题更新规则、培训、产品和检测，不追求公开个案。
+
+## 04｜Daily sprint · Days 23–25
+
+<div class="table-scroll" role="region" aria-label="Day 23–25 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 23</td><td>10 分钟概念 / 15 分钟主源阅读（Terms + Privacy）/ 25 分钟按风险类别建立登记册 / 10 分钟测验与证据更新</td><td><code>风险登记册 v0</code>：child safety、harassment、scam、exploitation、privacy 各有 evidence、owner 和下一步。</td></tr>
+    <tr><td>Day 24</td><td>45 分钟访谈（support、moderation 或 legal/compliance）/ 15 分钟整理与交叉验证</td><td><code>升级矩阵 v0</code>：每类风险有识别、保全、升级、申诉、通知和复盘问题，不填执行时长。</td></tr>
+    <tr><td>Day 25</td><td>10 分钟概念 / 15 分钟主源阅读（Platform Guidelines + PDPC/SCMR）/ 25 分钟无真实个案的 tabletop / 10 分钟测验与证据更新</td><td><code>事件响应清单 v0</code>：演练记录、权限边界、证据最小化和待专业确认项齐全。</td></tr>
+  </tbody>
+</table>
+</div>
+
+## 05｜现场任务：做一场不含个案的事件演练
+
+用完全虚构、无个人资料的情景卡，例如“一个房间出现疑似骚扰报告，语言混用，用户询问如何申诉”。参与者只讨论角色、证据类型、升级路径、通知原则和复盘问题，不生成露骨内容、不复制真实报告、不猜测处置结果。主持人记录每一个“没有访问权限”“没有本地语言覆盖”或“规则冲突”的 evidence gap。
+
+随后请 support 或 moderation 受访者解释最近一次流程（只说抽象主题）：哪个入口被用户找到？谁可以限制房间？申诉由谁查看？数据保存和删除边界如何决定？如果无法访问相应团队，把缺口和建议的 owner 写入矩阵，不用虚构 SLA 或 moderation performance。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+风险登记册：harm | exposure | evidence | severity policy | owner | detect/triage | mitigation | appeal | review date
+升级矩阵：风险类别 | first responder | escalation | evidence boundary | user notice | legal/local advice | status
+事件响应清单：识别 | 保全 | 隔离 | 决定 | 申诉/通知 | 复盘 | 权限检查 | 演练日期
+```
+
+检查清单：
+
+- 不声明平台 moderation 速度、准确率、误伤率或实际合规状态；未知项标为内部数据待验证。
+- 不把 PDPC、SCMR、Terms 或 Privacy 摘要当成针对 SUGO 的法律意见或许可结论。
+- 事件材料不含姓名、账号、联系方式、原始私聊、露骨内容、真实支付或可识别个案。
+- Arabic/Arabizi、女性安全、未成年人和申诉都有明确 owner 与升级问题，不靠单一关键词过滤。

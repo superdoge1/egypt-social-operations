@@ -1,0 +1,89 @@
+---
+id: management-data-collaboration
+title: 用 RACI、周会与 SQL 对齐经营
+description: 把数据请求、周经营会、Dashboard 草图和 SQL/BI 需求串成可复现协作，而不是凭仪表盘直觉决策。
+phase: 经营系统
+order: 10
+days: [26, 27]
+estimatedMinutes: 120
+prerequisites: [trust-safety-regulation]
+outcomes: [RACI, 周经营会, Dashboard 草图, SQL/BI 需求说明]
+sourceLinks:
+  - { label: SUGO Privacy Policy, url: https://www.voicemaker.media/privacy.html, kind: primary, verifiedAt: "2024-12-30", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: Egypt Personal Data Protection Center, url: https://www.pdpc.gov.eg/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+  - { label: DataReportal Digital 2026 Egypt, url: https://datareportal.com/reports/digital-2026-egypt, kind: primary, verifiedAt: "2025-11-08", jurisdiction: egypt, stability: review-quarterly, requiresInternalValidation: true }
+artifacts:
+  - { title: RACI, description: 为指标、实验、风险和决策记录 Responsible、Accountable、Consulted、Informed 的空白表。, visibility: internal }
+  - { title: 周经营会, description: 以事实、变化、阻塞、决定和下周验证为结构的会议模板，不放内部会议记录。, visibility: internal }
+  - { title: Dashboard 草图, description: 标注指标 grain、切片、警戒线和来源的线框模板，数值保留空白。, visibility: internal }
+  - { title: SQL/BI 需求说明, description: 面向分析师的可复现请求模板，使用占位字段而非真实表名或个人数据。, visibility: internal }
+---
+
+## 01｜用 RACI 把决定和数据连起来
+
+一个 Egypt 运营周不会因为有 Dashboard 就自动对齐。先为每个决定写 `RACI`：谁 Responsible 执行，谁 Accountable 拍板，谁 Consulted 提供专业判断，谁 Informed 接收结果。指标、实验、房间供给、支付争议和安全事件可以有不同 RACI；不要把“数据团队有权限”误写成“数据团队对业务结果负责”。
+
+周经营会只讨论可追溯的变化：上周的证据、当前的基线或 `baseline-request`、分层差异、风险/阻塞、需要做的决定和下周验证。每条结论连接 `metric contract`、来源日期、owner 和下一次复核；未知数字写 `pending`，不能用市场背景替代内部结果。
+
+## 02｜证据标签保护跨团队协作
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO Privacy Policy 公开资料处理和删除等主题；PDPC 公开数据保护框架入口；DataReportal 公开 Egypt 的市场估算。它们提供讨论边界，不是内部 Dashboard 数据。 |
+| 内部数据待验证 | DAU/MAU、retention、room liquidity、payer、safety 或任何城市/渠道基线都要有事件定义、访问批准和数据 owner；本课不填值。 |
+| 访谈待交叉验证 | 向 analyst、product、ops、support 和 safety 逐个问“谁定义、谁取数、谁解释、谁决定”；保留分歧和访问缺口。 |
+| 运营假设 | 一张小而清晰的 Dashboard 草图配合 RACI，可能比多个没有口径的图表更快推动决定；需要周会反馈验证。 |
+
+## 03｜SQL literacy：只用安全的虚构事件练习
+
+SQL 目标是能提出可复现的问题，不是独立读取生产库。下面的表名和字段都是虚构的：
+
+```sql
+SELECT
+  e.cohort_date,
+  CASE WHEN r.room_id IS NULL THEN 'no_room' ELSE 'entered_room' END AS room_state,
+  COUNT(DISTINCT e.user_key) AS users
+FROM sample_events AS e
+LEFT JOIN sample_rooms AS r ON r.user_key = e.user_key
+WHERE e.event_name IN ('signup', 'meaningful_interaction')
+  AND e.event_date >= DATE '2026-01-01'
+GROUP BY e.cohort_date, room_state;
+```
+
+读这条查询时，先问五件事：`SELECT` 选了什么结果；`WHERE` 排除了谁；`GROUP BY` 的 grain 是 cohort 日还是用户；`CASE` 是否把缺失关系误当失败；`JOIN` 是否会重复计数。再把一条 cohort 结果读成“某 cohort 在窗口内完成某事件的用户数”，而不是自动称为 retention。真正的数据请求还要写时间窗、时区、切片、安全字段、去重规则、来源表的审批和验收样例。
+
+## 04｜Daily sprint · Days 26–27
+
+<div class="table-scroll" role="region" aria-label="Day 26–27 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 26</td><td>45 分钟访谈（analyst、product 或 ops）/ 15 分钟整理与口径标注</td><td><code>RACI v0</code>、<code>周经营会议程 v0</code> 与 <code>Dashboard 草图 v0</code>，每个组件有 owner、grain 和证据状态。</td></tr>
+    <tr><td>Day 27</td><td>10 分钟概念 / 15 分钟主源阅读（Privacy + PDPC）/ 25 分钟用虚构表练习 SELECT/WHERE/GROUP BY/CASE/JOIN 与 cohort reading / 10 分钟测验与证据更新</td><td><code>SQL/BI 需求说明 v0</code>，包含一条可复现请求、隐私边界、验收样例和未决口径。</td></tr>
+  </tbody>
+</table>
+</div>
+
+> **Review gate · Day 27** — 只有当业务问题、metric grain、RACI、隐私边界、SQL 结果解释和安全护栏都可复述，才能进入 Day 31–90 方案；任何真实数据访问仍需授权。
+
+## 05｜现场任务：让分析师能复现你的问题
+
+先写一句不带数字的业务问题，例如“比较不同渠道新用户首次 meaningful interaction 的发生情况，并按语言和安全暴露切片”。让分析师指出缺少的事件、分母、时间窗、去重规则和访问权限。再用虚构表写一段 SQL，故意检查 NULL、重复 JOIN、cohort 日期和 `CASE` 分类，记录“查询可运行但口径不成立”的例子。
+
+周会演练时，每位参与者只能提交一条 evidence-backed decision：来源、日期、RACI、风险、下一步和 review cadence。不要把真实用户 key、姓名、手机号、私有表名、未授权 Dashboard 或安全个案放入课程笔记。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+RACI：决定/指标 | Responsible | Accountable | Consulted | Informed | 证据链接 | 复核日
+周经营会：变化 | 证据/日期 | 基线或 pending | 风险 | 决定 | owner | 下次验证
+Dashboard 草图：问题 | metric grain | 事件 | 切片 | guardrail | source | access boundary
+SQL/BI 需求说明：业务问题 | cohort | SELECT/WHERE/GROUP BY/CASE/JOIN 说明 | 时间窗 | 验收样例 | 审批人
+```
+
+检查清单：
+
+- SQL 示例只使用虚构表和字段；不复制生产 schema、用户 key、真实查询或私有链接。
+- 能说明 SELECT、WHERE、GROUP BY、CASE、JOIN 和 cohort reading 的 grain 与重复计数风险。
+- 每条决定都有 RACI、来源日期、基线或 baseline-request、隐私边界和 review cadence。
+- 未知 DAU/MAU、retention、payer、safety 或城市结果保持 pending，不用公开市场数字填补。

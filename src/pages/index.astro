@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProgressPanel from '../components/ProgressPanel.astro';
+import LessonCard from '../components/LessonCard.astro';
+import { validateDayCoverage, validateLessonDurations, validateLessonGraph, validateQuizCoverage } from '../lib/content-graph';
+import { quizzes } from '../data/quizzes';
+import { withBase } from '../lib/urls';
+const lessons=(await getCollection('lessons')).sort((a,b)=>a.data.order-b.data.order);
+const curriculum=lessons.map(({data})=>({id:data.id,order:data.order,days:data.days,estimatedMinutes:data.estimatedMinutes,prerequisites:data.prerequisites}));
+const graphErrors=[...validateLessonGraph(curriculum),...validateDayCoverage(curriculum),...validateLessonDurations(curriculum),...validateQuizCoverage(curriculum, quizzes)];
+if(graphErrors.length) throw new Error(`Invalid curriculum:\n${graphErrors.join('\n')}`);
+const lessonIds=lessons.map(({data})=>data.id);
+---
+<BaseLayout title="埃及社交运营 Fieldbook"><div class="page-shell home-shell">
+  <div class="briefing-header" data-entrance><span class="eyebrow">CAIRO SIGNAL ATLAS · BRIEFING 01</span><p>PUBLIC / UNOFFICIAL · LOCAL-FIRST · 2026</p></div>
+  <section class="hero" data-entrance><div class="hero-statement"><span class="eyebrow">DAY 01 → 30 · EGYPT SOCIAL OPERATIONS</span><h1>先看清。<span>再跑可靠。</span></h1><p class="hero-copy">一条从全球社交娱乐类别，到埃及 SUGO 客户运营的公开证据学习路径。每天留下可验证的产出，把结论、未知与下一步行动分开。</p><div class="hero-actions"><a class="button" href={withBase(`learn/${lessonIds[0]}/`)}>开始 Day 1</a><a class="button secondary" href={withBase('roadmap/')}>查看 30 天路线</a></div></div>
+  <aside class="signal-card" aria-label="证据路线简报"><div class="signal-card-header"><span>NILE EVIDENCE SPINE</span><span>11 CHECKPOINTS</span></div><div class="signal-card-body"><ul><li><strong>01</strong><span>公开资料 → 建立类别与产品底图</span></li><li><strong>02</strong><span>数据请求 → 标记内部未知</span></li><li><strong>03</strong><span>访谈交叉 → 检查埃及现场假设</span></li><li><strong>04</strong><span>运营方案 → 交付 Day 31–90</span></li></ul></div></aside></section>
+  <ProgressPanel lessonIds={lessonIds} storageKey="egyptSocialOperationsProgress.v1" />
+  <section class="build-trace" data-entrance aria-labelledby="route-heading"><div class="section-heading"><div><span class="eyebrow">PROGRESS LEDGER · 11 CHECKPOINTS</span><h2 id="route-heading">Nile route</h2></div><p>连续的证据路线把每节课和一项可交付成果连起来。颜色只做导航，状态始终以文字标明。</p></div><div class="route-legend" aria-label="证据状态图例"><span>PUBLIC SOURCE</span><span class="legend-data">DATA REQUEST</span><span class="legend-interview">INTERVIEW CROSS-CHECK</span><span class="legend-plan">OPERATING PLAN</span></div><div class="nile-spine" data-nile-spine><ol class="route-list">{lessons.map(({data})=><Fragment><LessonCard {...data}/>{[8,17,27,30].includes(data.days[data.days.length - 1]) && <li class="review-gates"><div class="review-gate" data-review-gate><strong>REVIEW GATE</strong><span>Day {data.days[data.days.length - 1]} · {data.days[data.days.length - 1] === 8 ? '经营基础' : data.days[data.days.length - 1] === 17 ? '埃及市场' : data.days[data.days.length - 1] === 27 ? '经营系统' : '90 天交付'}</span></div></li>}</Fragment>)}</ol></div></section>
+</div></BaseLayout>

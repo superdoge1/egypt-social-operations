@@ -1,0 +1,84 @@
+---
+id: language-culture-localization
+title: 用三种语言层级做好埃及本地化
+description: 区分 Egyptian Arabic、MSA、English 与 Arabizi 的使用场景，配合 RTL、文化日历和 native review 做本地化 QA。
+phase: 埃及市场
+order: 5
+days: [12, 13, 14]
+estimatedMinutes: 180
+prerequisites: [egypt-market-users]
+outcomes: [三语词卡, 文化日历, 本地化 QA 表]
+sourceLinks:
+  - { label: AUC Egyptian Arabic and Arabizi thesis, url: https://fount.aucegypt.edu/etds/295/, kind: reference, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: stable, requiresInternalValidation: false }
+  - { label: AUC Arabic language variation thesis, url: https://fount.aucegypt.edu/etds/2395/, kind: reference, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: stable, requiresInternalValidation: false }
+  - { label: WANLP Arabic dialect and code-switching paper, url: https://aclanthology.org/2022.wanlp-1.18/, kind: reference, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: stable, requiresInternalValidation: false }
+  - { label: Egypt Presidency official holidays 2026, url: https://www.presidency.eg/en/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D8%B9%D8%B7%D9%84%D8%A7%D8%AA-%D8%A7%D9%84%D8%B1%D8%B3%D9%85%D9%8A%D8%A9/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: egypt, stability: review-before-use, requiresInternalValidation: true }
+artifacts:
+  - { title: 三语词卡, description: 记录中文意图、MSA、Egyptian Arabic、English、候选 Arabizi 和 native reviewer 状态的空白卡片。, visibility: public-template }
+  - { title: 文化日历, description: 只引用官方日期并保留年度复核栏，不预测用户行为或活动效果。, visibility: public-template }
+  - { title: 本地化 QA 表, description: 覆盖 RTL、截断、语气、敏感词、账单和安全文案的检查清单，不保存真实用户内容。, visibility: public-template }
+---
+
+## 01｜语言层级是运营设计，不是翻译收尾
+
+Egypt 的社交表达可能混用 Egyptian Arabic、Modern Standard Arabic（MSA）、English 与非标准 Arabizi。语言选择应随任务走：生命周期和客服需要自然、可回应的本地语气；法律、安全、隐私和 billing 需要稳定、可审阅的 MSA 或经批准的双语文本；产品名和技术词可以保留 English，但必须检查上下文。Arabizi 不是固定拼写标准，不能用一张字典替代 native review。
+
+把 `language`, `script`, `direction`, `tone`, `risk level`, `reviewer` 做成文案字段。RTL 不是把文字方向翻转这么简单，还要检查数字、日期、按钮顺序、混排 URL、占位符和错误提示在小屏上是否可读。
+
+## 02｜证据分层，先标注语言事实的边界
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | AUC 研究与 WANLP 论文讨论埃及阿拉伯语、方言差异和 code-switching；Egypt Presidency 页面提供当年官方节日日历。它们支持研究方向与日期来源，不等于每位用户的偏好。 |
+| 内部数据待验证 | 各语言版本的曝光、点击、首个 meaningful interaction、举报和支持解决率需要按产品事件取数；本课不编写语言转化率或安全表现。 |
+| 访谈待交叉验证 | 让 native reviewer、客服、moderation 和 Egypt operations 逐句说明自然度、歧义、敏感表达和升级路径；至少留一位独立复核者。 |
+| 运营假设 | 生命周期入口可先用自然 Egyptian Arabic，MSA 更适合规则与安全信息；必须用真实 QA、用户反馈与风险复核验证。 |
+
+## 03｜词卡示例与 RTL 实践
+
+下面只提供待审核的候选词卡，不把它们声明为唯一或普遍表达。每个阿拉伯语片段都保持正确的语言与方向属性：
+
+| 意图 | 候选 Arabic | Arabizi / English note | 使用边界 |
+| --- | --- | --- | --- |
+| 友好问候 | <span lang="ar" dir="rtl">إزيك؟</span> | `ezzayak/ezzayek?` / How are you? | 生活周期或房间开场；性别与语气需 native review。 |
+| 询问近况 | <span lang="ar" dir="rtl">عامل إيه؟</span> | `3amel eh?` / How’s it going? | 候选 Egyptian Arabic；不要直推所有地区。 |
+| 缓和语气 | <span lang="ar" dir="rtl">معلش</span> | `ma3lesh` / sorry or no worries | 可能依上下文变义，安全或申诉文本不能未经审核使用。 |
+| 确认收到 | <span lang="ar" dir="rtl">تمام</span> | `tamam` / okay | 轻量确认，不代替账单或政策说明。 |
+| 感谢 | <span lang="ar" dir="rtl">شكراً</span> | `shokran` / thank you | 支持与房间互动候选文案。 |
+| 正式安全动作 | <span lang="ar" dir="rtl">إبلاغ</span> | `iblagh` / report | MSA 候选标签；按钮、帮助页与申诉流程必须审核。 |
+
+本地化 QA 要逐屏检查 `dir="rtl"` 容器、阿拉伯数字、英文产品名和可复制链接；不要把 Arabizi 直接当作法规、安全或支付文本。
+
+## 04｜Daily sprint · Days 12–14
+
+<div class="table-scroll" role="region" aria-label="Day 12–14 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 12</td><td>10 分钟概念 / 15 分钟主源阅读（AUC/WANLP）/ 25 分钟建立语言分层词卡 / 10 分钟测验与证据更新</td><td><code>三语词卡 v0</code>：至少 8 个意图字段，所有 Arabizi 行标为候选且有 reviewer 空位。</td></tr>
+    <tr><td>Day 13</td><td>45 分钟访谈（native reviewer 或客服）/ 15 分钟整理与差异标注</td><td><code>语言决策记录</code>：逐条记录自然度、风险、适用 surface、被拒词和需要第二次复核的句子。</td></tr>
+    <tr><td>Day 14</td><td>10 分钟概念 / 15 分钟主源阅读（官方 2026 holidays）/ 25 分钟 RTL 与文化日历 QA / 10 分钟测验与证据更新</td><td><code>本地化 QA 表 v0</code> 与 <code>文化日历 v0</code>，明确复核日期、语言 owner 和发布前阻断项。</td></tr>
+  </tbody>
+</table>
+</div>
+
+## 05｜现场任务：让 native review 真的能阻止发布
+
+准备一组不含账号、个人资料或真实个案的界面句子，邀请 native reviewer 逐句判断：是否像 Egyptian Arabic、是否需要 MSA、是否会被理解成承诺、是否在 RTL 下完整、是否触发安全或隐私风险。记录“原句意图—候选译文—修改理由—是否阻断发布”，不要只收集一句“听起来不错”。
+
+文化日历只从 Egypt Presidency 当年官方页面抄录节日名称和日期，并标注查阅日期；Ramadan、Eid、Sham El-Nessim 等周期可能影响排班与 QA 时点，但不自动证明用户活跃或付费变化。法律、隐私、安全与 billing 文案必须走相应内部审批。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+三语词卡：intent | 中文意图 | MSA | Egyptian Arabic | English | Arabizi 候选 | lang/dir | reviewer | 状态
+文化日历：事件 | 官方日期 | 来源 | 查阅日 | 运营影响假设 | owner | 年度复核
+本地化 QA 表：surface | locale/script | RTL | 截断 | tone | safety/billing | native review | blocker | 复核日
+```
+
+检查清单：
+
+- 阿拉伯语片段使用 `lang="ar" dir="rtl"`，混排数字和 English 也在真实屏幕上检查。
+- Arabizi 明确标为非标准候选；native review 是发布前必需条件。
+- MSA 用于法律、安全、隐私、账单等高风险文本时仍要走专业审核，不把课程当法律意见。
+- 官方节日日期每年重新查证；不填未经来源支持的时段、增长率或目标。

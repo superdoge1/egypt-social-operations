@@ -1,0 +1,96 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LessonControls from '../../components/LessonControls.astro';
+import { quizzes } from '../../data/quizzes';
+import { withBase } from '../../lib/urls';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map((lesson) => ({ params: { slug: lesson.data.id }, props: { lesson } }));
+}
+
+const { lesson } = Astro.props;
+const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
+const index = lessons.findIndex(({ data }) => data.id === lesson.data.id);
+const previous = lessons[index - 1];
+const next = lessons[index + 1];
+const { Content } = await render(lesson);
+const lessonIds = lessons.map(({ data }) => data.id);
+const quiz = quizzes[lesson.data.id];
+if (!quiz) throw new Error(`Missing quiz for ${lesson.data.id}`);
+
+const artifactVisibilityLabel = (visibility: string) => ({
+  'public-template': '公开模板',
+  internal: '内部核验',
+  restricted: '限制访问',
+}[visibility] ?? visibility);
+---
+
+<BaseLayout title={lesson.data.title} description={lesson.data.description}>
+  <div class="page-shell">
+    <header class="lesson-header" data-dossier>
+      <span class="eyebrow">{lesson.data.phase} · MODULE {String(lesson.data.order).padStart(2, '0')}</span>
+      <h1>{lesson.data.title}</h1>
+      <p class="lead">{lesson.data.description}</p>
+      <p class="lesson-meta">
+        <span>Day {lesson.data.days[0]}–{lesson.data.days[lesson.data.days.length - 1]}</span>
+        <span>{lesson.data.estimatedMinutes} 分钟</span>
+        <span>{lesson.data.outcomes.length} 个明确产出</span>
+      </p>
+    </header>
+
+    <div class="lesson-layout">
+      <article class="lesson-prose">
+        <section class="sources evidence-ledger" data-evidence-ledger aria-labelledby="evidence-ledger-heading">
+          <span class="eyebrow">EVIDENCE LEDGER</span>
+          <h2 id="evidence-ledger-heading">证据分层</h2>
+          <ul>
+            <li><strong>公开资料已验证</strong><span>可由列出的公开来源复核的产品表面、政策或市场背景。</span></li>
+            <li><strong>内部数据待验证</strong><span>需要获批事件、聚合指标、权限或内部 owner 才能确认的内容。</span></li>
+            <li><strong>访谈待交叉验证</strong><span>必须向不同角色访谈并与第二来源交叉检查的主题。</span></li>
+            <li><strong>运营假设</strong><span>可逆的工作假设，只有在实验、数据和安全复盘后才能升级为结论。</span></li>
+          </ul>
+        </section>
+
+        <Content />
+
+        <section class="sources" data-source-list aria-labelledby="sources-heading">
+          <span class="eyebrow">SOURCE TRAIL</span>
+          <h2 id="sources-heading">继续查证</h2>
+          <ul>
+            {lesson.data.sourceLinks.map((source) => (
+              <li data-source-row>
+                <a href={source.url}>{source.label} ↗</a>
+                <small>
+                  kind {source.kind} · verified {source.verifiedAt} · jurisdiction {source.jurisdiction} · stability {source.stability} · {source.requiresInternalValidation ? 'internal validation required' : 'internal validation not required'}
+                </small>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="sources" data-artifact-list aria-labelledby="artifacts-heading">
+          <span class="eyebrow">EVIDENCE ARTIFACTS</span>
+          <h2 id="artifacts-heading">证据包模板</h2>
+          <ul>
+            {lesson.data.artifacts.map((artifact) => (
+              <li data-artifact-item>
+                <strong>{artifact.title}</strong>
+                <span data-artifact-visibility> · {artifactVisibilityLabel(artifact.visibility)}</span>
+                <p>{artifact.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <nav class="lesson-nav" aria-label="课程章节">
+          {previous ? <a href={withBase(`learn/${previous.data.id}/`)}>← {previous.data.title}</a> : <span></span>}
+          {next ? <a href={withBase(`learn/${next.data.id}/`)}>{next.data.title} →</a> : <a href={withBase('projects/')}>查看项目证据 →</a>}
+        </nav>
+      </article>
+
+      <LessonControls lessonId={lesson.data.id} lessonIds={lessonIds} storageKey="egyptSocialOperationsProgress.v1" quiz={quiz} />
+    </div>
+  </div>
+</BaseLayout>

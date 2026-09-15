@@ -1,0 +1,74 @@
+---
+id: sugo-product-ecosystem
+title: 画出 SUGO 的用户与供给生态
+description: 从公开产品表面还原用户、主播、房间、公会与代理角色的旅程，并把后台机制留作验证问题。
+phase: 经营基础
+order: 2
+days: [3, 4, 5]
+estimatedMinutes: 180
+prerequisites: [social-entertainment-landscape]
+outcomes: [用户旅程, 供需生态图, 待核实问题清单]
+sourceLinks:
+  - { label: SUGO Google Play 产品页, url: https://play.google.com/store/apps/details?id=com.voicemaker.android&hl=en_US, kind: primary, verifiedAt: "2026-09-10", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: SUGO Terms and Conditions, url: https://www.voicemaker.media/terms.html, kind: primary, verifiedAt: "2024-12-30", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: SUGO Privacy Policy, url: https://www.voicemaker.media/privacy.html, kind: primary, verifiedAt: "2024-12-30", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+artifacts:
+  - { title: 用户旅程, description: 用匿名角色和公开可见步骤描述 discovery、room、1:1、Moments 与退出，不填内部转化率。, visibility: public-template }
+  - { title: 供需生态图, description: 展示用户、host、room、guild、agent 之间的假设连接，并给每条连接保留证据状态。, visibility: internal }
+  - { title: 待核实问题清单, description: 把结算、推荐、房间治理和身份关系写成可访谈或取数的问题，不存访谈原文。, visibility: public-template }
+---
+
+## 01｜用一条旅程连接用户、关系与供给
+
+把 SUGO 的 journey 写成状态变化，而不是功能清单：发现产品 → 选择语言与身份 → 找到匹配或房间 → 发生第一次有意义互动 → 回到 1:1、`Moments` 或房间 → 退出、报告、申诉或回访。每一步写“用户能观察到的动作”和“运营要确认的条件”，例如房间是否有清晰主题、主播是否按时出现、报告入口是否能被找到。
+
+这条旅程至少包含五类角色：普通 user 产生关系需求；host/主播提供可参与的房间或内容；room 是实时供给单元；guild/agency 可能是供给组织；agent 可能是招募、支持或运营协作角色。`guild`、代理关系、推荐、排名、结算和现金流出都不能从公开页面补写。角色是分析框架，不是对 SUGO 内部组织结构的断言。
+
+## 02｜四种证据标签放在每条边上
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO 公开商店页面描述语音房、匹配、文字/图片/语音/视频沟通、Moments、主播、礼物和徽章；Terms 公开了成人年龄门槛与行为限制；这些只支持可见表面与规则摘要。 |
+| 内部数据待验证 | 从发现到首次互动的转化、room fill、host 供给、关系留存、payer 行为和任何结算链路都需要内部事件与口径；本课不填数字。 |
+| 访谈待交叉验证 | 询问产品、数据、支持、Egypt 运营和供给侧：谁负责一条边、何时升级、哪些角色能看见哪些数据；访谈只保存主题和证据标签。 |
+| 运营假设 | 如果陪伴是承诺，那么“有回应的第一段关系”可能比单纯打开 App 更接近 activation；需用事件定义与访谈验证。 |
+
+## 03｜从公开表面画供需生态图
+
+在图中用实线表示“公开页面直接可见”的边，用虚线表示“待验证”的边，用颜色或标签标出 safety、support、billing 触点。用户到 room 的边可以注明“加入群组语音房”；用户到 host 的边可以注明“观看或互动”；用户到 Moments 的边可以注明“发布、点赞或回访”。不要把“评论里有人声称”当作平台机制，也不要把 Google Play 上的开发者展示名称和 Terms 中的合同主体直接合并。
+
+安全和隐私应从旅程一开始出现：Terms 规定 18 岁或当地成年年龄门槛，Privacy Policy 说明资料、UGC、语音视频、交易、设备和位置等处理主题。运营应用时用最小数据原则和合法授权思路提问；这些公开文档不是 Egypt 的法律意见，也不是对内部处置效果的证明。
+
+## 04｜Daily sprint · Days 3–5
+
+<div class="table-scroll" role="region" aria-label="Day 3–5 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 3</td><td>10 分钟概念 / 15 分钟主源阅读（SUGO store listing）/ 25 分钟匿名旅程走查 / 10 分钟测验与证据更新</td><td><code>用户旅程 v0</code>：发现、匹配、room、1:1、Moments、退出六个节点各有一个可见动作。</td></tr>
+    <tr><td>Day 4</td><td>45 分钟访谈（产品/支持/运营任选一位）/ 15 分钟整理与证据标注</td><td><code>访谈主题卡</code>：每条主题包含角色、事件、待核实机制和是否需要第二来源。</td></tr>
+    <tr><td>Day 5</td><td>10 分钟概念 / 15 分钟主源阅读（Terms + Privacy）/ 25 分钟画供需与安全边 / 10 分钟测验与证据更新</td><td><code>供需生态图 v0</code> 与 <code>待核实问题清单 v0</code>，每条虚线边有 owner 或数据请求方向。</td></tr>
+  </tbody>
+</table>
+</div>
+
+## 05｜现场任务：走查加访谈，不代用户发言
+
+用公开渠道做一次体验记录，重点记“看得见什么、下一步是否明确、报告和隐私入口是否可见”。不要使用真实他人账号、复制评论、截取私聊或尝试绕过地区/年龄限制。访谈时从过去行为开始：最近一次进入语音房是什么场景？谁帮助你理解规则？遇到不适内容时知道如何报告吗？对 host、guild、agent 的称呼和职责如何理解？
+
+将每条答案拆成事实、解释和未知三格。若只能访问 6 位而非 8 位，记录“access gap”及其可能影响；不能用自己的猜测填上缺失样本。对实体身份差异建立一条专门问题：“商店开发者、Terms 签约方与公司公开主体分别代表什么关系？”
+
+## 06｜Artifact 模板与检查清单
+
+```text
+用户旅程：节点 | 用户动作 | 可见反馈 | 角色 | safety/support/billing 触点 | 来源日期
+供需生态图：节点 A | 节点 B | 关系证据 | 假设强度 | owner | 待验证问题
+待核实问题清单：问题 | 为什么重要 | 需要的事件/访谈 | 受访角色 | 状态 | 复核日期
+```
+
+检查清单：
+
+- 旅程每一步描述可观察动作，不声称后台推荐、排名、现金流出或公会佣金机制。
+- 每条公开事实有来源和日期；内部未知、访谈主题、运营假设不会混在同一列。
+- Terms 的年龄与行为规则只做教育性摘要，法律适用与执行效果另行请专业人士和内部负责人确认。
+- 图中不出现姓名、账号、联系方式、私链、个案或内部表名。

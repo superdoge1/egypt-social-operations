@@ -1,0 +1,62 @@
+---
+interface Props { lessonIds: string[]; storageKey: string; }
+const { lessonIds, storageKey } = Astro.props;
+---
+<section class="progress-panel" data-progress-panel data-storage-key={storageKey} data-lessons={JSON.stringify(lessonIds)} aria-label="学习进度" data-entrance>
+  <div class="progress-copy">
+    <span class="eyebrow">PROGRESS LEDGER</span>
+    <strong data-progress-label>0 / {lessonIds.length} 已完成</strong>
+  </div>
+  <strong class="progress-percentage" data-progress-percentage>0%</strong>
+  <div class="progress-meter">
+    <div class="progress-track" role="progressbar" aria-label="课程完成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-progress-fill></span></div>
+    <span class="progress-caption mono">ROUTE COMPLETION</span>
+  </div>
+  <div class="progress-actions">
+    <button class="text-button" type="button" data-reset-progress>重置进度</button>
+    <p class="storage-limitation" data-storage-limitation role="status" hidden>本机存储不可用；进度仅保留在当前页面。</p>
+  </div>
+</section>
+<script>
+  import { calculateProgress, clearStoredProgress, readStoredProgress } from '../lib/progress';
+  document.querySelectorAll<HTMLElement>('[data-progress-panel]').forEach((panel) => {
+    const key = panel.dataset.storageKey ?? '';
+    const ids = JSON.parse(panel.dataset.lessons ?? '[]') as string[];
+    let storage: Storage | null = null;
+    let storageIssue = false;
+    try {
+      storage = window.localStorage;
+      storage.getItem(key);
+    } catch {
+      storage = null;
+      storageIssue = true;
+    }
+    const resetButton = panel.querySelector<HTMLButtonElement>('[data-reset-progress]');
+    const limitation = panel.querySelector<HTMLElement>('[data-storage-limitation]');
+    const render = () => {
+      const state = storage ? readStoredProgress(storage, key, ids) : { completedLessonIds: [] };
+      const value = calculateProgress(state.completedLessonIds, ids);
+      const label = panel.querySelector<HTMLElement>('[data-progress-label]');
+      const percentage = panel.querySelector<HTMLElement>('[data-progress-percentage]');
+      const track = panel.querySelector<HTMLElement>('[role="progressbar"]');
+      const fill = panel.querySelector<HTMLElement>('[data-progress-fill]');
+      if (label) label.textContent = `${value.completed} / ${value.total} 已完成`;
+      if (percentage) percentage.textContent = `${value.percentage}%`;
+      if (track) track.setAttribute('aria-valuenow', String(value.percentage));
+      if (fill) fill.style.width = `${value.percentage}%`;
+      if (resetButton) resetButton.disabled = !storage;
+      if (limitation) {
+        limitation.hidden = !storageIssue;
+        limitation.textContent = storage ? '浏览器未能清除本机进度；原有数据保持不变。' : '本机存储不可用；进度仅保留在当前页面。';
+      }
+    };
+    resetButton?.addEventListener('click', () => {
+      if (window.confirm('清除本机保存的全部课程进度、分数和笔记？')) {
+        if (storage && !clearStoredProgress(storage, key)) storageIssue = true;
+        window.dispatchEvent(new CustomEvent('learning-progress-changed'));
+      }
+    });
+    window.addEventListener('learning-progress-changed', render);
+    render();
+  });
+</script>

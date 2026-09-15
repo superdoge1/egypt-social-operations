@@ -1,0 +1,75 @@
+---
+id: metrics-virtual-economy
+title: 用指标读懂关系、房间与虚拟经济
+description: 建立 activation、retention、room liquidity 与 monetization 的指标契约，不把未知的内部经济参数写成事实。
+phase: 经营基础
+order: 3
+days: [6, 7, 8]
+estimatedMinutes: 180
+prerequisites: [sugo-product-ecosystem]
+outcomes: [指标字典, 数据需求单, 经营漏斗]
+sourceLinks:
+  - { label: SUGO Google Play 产品页, url: https://play.google.com/store/apps/details?id=com.voicemaker.android&hl=en_US, kind: primary, verifiedAt: "2026-09-10", jurisdiction: platform, stability: review-before-use, requiresInternalValidation: true }
+  - { label: MICO WORLD 公司与产品介绍, url: https://www.micoworld.com/, kind: primary, verifiedAt: "2026-09-14", jurisdiction: company-public, stability: review-quarterly, requiresInternalValidation: true }
+artifacts:
+  - { title: 指标字典, description: 为每个指标记录 grain、分母、时间窗、切片、排除条件和负责人，数值留待内部取数。, visibility: public-template }
+  - { title: 数据需求单, description: 面向数据团队的可复现问题模板，不包含真实表名、账号、用户记录或内部查询结果。, visibility: internal }
+  - { title: 经营漏斗, description: 连接 acquisition、meaningful interaction、room liquidity、retention 和 payer 行为的空白漏斗。, visibility: internal }
+---
+
+## 01｜先问粒度，再问增长
+
+运营指标不是漂亮的数字，而是一份可重算的合同。每个定义至少写清 `grain`（事件、用户、房间或天）、分子、分母、时间窗、切片、排除条件、时区、数据 owner 和版本日期。比如 `activation rate` 可以被定义为“在注册后规定窗口内完成一次已定义 meaningful interaction 的合格新用户 / 同窗口合格新用户”；窗口、事件和合格条件必须由内部共同确认，不能在课上擅自填数。
+
+用同一套语言串起漏斗：`acquisition` → first meaningful interaction → `room liquidity` → relationship retention → `payer` 或支持行为。`D1/D7/D30` 是时间窗命名，不是默认存在的产品结果。对房间，可以分别观察排班可靠性、进入与回应、发言/互动和离开；不要用一个 room count 代表 liquidity。
+
+## 02｜公开事实、内部未知、访谈和假设分栏
+
+| 证据标签 | 本节的使用方式 |
+| --- | --- |
+| 公开资料已验证 | SUGO 商店页公开描述群组语音、匹配、Moments、主播、礼物和徽章；这支持事件候选表，不支持实际活跃、留存、payer rate 或 coin/diamond 比例。 |
+| 内部数据待验证 | DAU/MAU、收入、retention、room fill、payer conversion、退款/拒付和任何虚拟商品经济参数全部留空，先请求事件字典与抽样结果。 |
+| 访谈待交叉验证 | 与数据、产品、客服和财务/风控角色确认事件触发、去重、时区、退款回补、房间粒度和安全指标如何进入经营会。 |
+| 运营假设 | “第一次得到回应”可能比“打开页面”更接近激活；“可靠的房间排班”可能是留存前置条件；两者都需要实验和内部数据。 |
+
+## 03｜把 virtual economy 先画成未知边界
+
+公开商店页面能支持“存在 in-app purchases、礼物、徽章或状态效果”的表面描述。它不能告诉我们 coin/diamond ratio、付费聊天机制、host cash-out、agency commission、价格版本、地区限制或退款如何影响关系。将这些字段放在 `internal unknown` 区域，并为每一项指定验证来源，而不是从用户评论或其他产品迁移数字。
+
+先建立 `metric contract`，再写 SQL 或 Dashboard。一个合格的数据请求应该能回答：要比较哪个 cohort？事件发生在什么时区？重复进入是否去重？被报告或退款的事件如何标记？安全暴露是切片、结果还是两者？如果团队不能回答，结果应是“口径待定”，而不是一个看似精确的百分比。
+
+## 04｜Daily sprint · Days 6–8
+
+<div class="table-scroll" role="region" aria-label="Day 6–8 学习冲刺表" tabindex="0">
+<table data-daily-sprint>
+  <thead><tr><th>Day</th><th>学习循环</th><th>可观察输出</th></tr></thead>
+  <tbody>
+    <tr><td>Day 6</td><td>10 分钟概念 / 15 分钟主源阅读（SUGO store listing）/ 25 分钟把产品表面映射成事件候选 / 10 分钟测验与证据更新</td><td><code>指标字典 v0</code>：至少写出 5 个指标的 grain、分母、窗口和未知项，数值列保持空白。</td></tr>
+    <tr><td>Day 7</td><td>45 分钟访谈（数据或产品 owner）/ 15 分钟整理与口径标注</td><td><code>数据需求单 v0</code>：一条可复现需求，包含 cohort、时间窗、切片、排除条件、验收样例和待确认 owner。</td></tr>
+    <tr><td>Day 8</td><td>10 分钟概念 / 15 分钟复读来源与反例 / 25 分钟审阅 activation→room→retention 漏斗 / 10 分钟测验与证据更新</td><td><code>经营漏斗 v0</code> 与四类证据清单；列出下一步停止条件。</td></tr>
+  </tbody>
+</table>
+</div>
+
+> **Review gate · Day 8** — 只有当每个指标都有粒度、分母、日期和 owner，且未知经济参数仍为空或 pending，才能把漏斗带入埃及市场阶段。
+
+## 05｜现场任务：做一次 metric-grain 访谈
+
+先给受访者看一条脱敏的指标定义，要求对方指出“哪一个事件算发生、哪一个用户应排除、什么时候结算”。追问近一次真实报表或需求如何处理跨时区、重复设备、退款、举报和房间重连。不要索要用户行级数据、账号、支付记录或未授权的 Dashboard 截图。
+
+访谈后写一页 `definition decision`：已确认字段、冲突观点、需要第二位受访者的地方、可以先用的公开事实、以及数据不可得时的替代验证。将“没有访问权限”本身作为 evidence gap，而不是把公开市场数字当产品 proxy。
+
+## 06｜Artifact 模板与检查清单
+
+```text
+指标字典：名称 | grain | numerator | denominator | 时间窗/时区 | 切片 | 排除 | owner | verifiedAt | 状态
+数据需求单：业务问题 | cohort | 所需字段 | 口径问题 | 验收样例 | 访问边界 | 负责人 | 截止复核日
+经营漏斗：阶段 | 事件 | 进入条件 | 离开条件 | 安全护栏 | 当前数字 | 来源/状态
+```
+
+检查清单：
+
+- 没有 DAU、MAU、收入、留存率、payer rate 或虚拟商品比例的编造数字。
+- 每个百分比都能指出分母、时间窗、切片和来源；公共 ad-reach 不能代替产品指标。
+- `room liquidity`、meaningful interaction、退款和安全指标都写出待验证条件。
+- 只交付空白模板、公开来源和去标识化决策，不放私有表名、个人数据或支付详情。
