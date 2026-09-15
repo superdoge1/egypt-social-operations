@@ -168,6 +168,15 @@ test.describe('Cairo Signal Atlas design contracts', () => {
     await expect(page.locator('[data-reset-progress]')).toBeDisabled();
   });
 
+  test('keeps local progress controls honest when storage reads are blocked', async ({ page }) => {
+    await page.addInitScript(() => {
+      Storage.prototype.getItem = () => { throw new DOMException('blocked', 'SecurityError'); };
+    });
+    await page.goto('./');
+    await expect(page.locator('[data-storage-limitation]')).toBeVisible();
+    await expect(page.locator('[data-reset-progress]')).toBeDisabled();
+  });
+
   test('reports a failed local progress reset without losing the page', async ({ page }) => {
     await page.goto('./');
     await page.evaluate(() => {

@@ -24,7 +24,13 @@ const { lessonIds, storageKey } = Astro.props;
     const ids = JSON.parse(panel.dataset.lessons ?? '[]') as string[];
     let storage: Storage | null = null;
     let storageIssue = false;
-    try { storage = window.localStorage; } catch { storageIssue = true; }
+    try {
+      storage = window.localStorage;
+      storage.getItem(key);
+    } catch {
+      storage = null;
+      storageIssue = true;
+    }
     const resetButton = panel.querySelector<HTMLButtonElement>('[data-reset-progress]');
     const limitation = panel.querySelector<HTMLElement>('[data-storage-limitation]');
     const render = () => {
