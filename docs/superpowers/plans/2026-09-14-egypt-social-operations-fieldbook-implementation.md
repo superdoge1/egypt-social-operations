@@ -30,3 +30,6 @@ Rewrite README, favicon, metadata, and public disclaimers; retain MIT licensing 
 
 Run `npm run verify`, confirm 0 Astro diagnostics, all Vitest and both Playwright projects pass, and exactly 16 pages build. Perform screenshot review of home, first lesson, roadmap, and 404 at 375, 768, and 1440 px; fix only evidenced issues with regression tests. Audit public/private boundaries, external links, browser console/resource responses, git status, and copied-brand strings. Request a whole-branch code/content review and resolve all Critical/Important findings. Commit verified fixes if needed.
 
+## Implementation status (updated 2026-09-15)
+
+This document remains the historical implementation plan. Tasks 1–3 are represented by the current branch, and Task 4 adds the README, static metadata/disclaimer, original SVG favicon, MIT notice, Pages workflow, and repository hygiene rules. The workflow is release-ready but no GitHub Pages deployment has been run or claimed here. Task 5 remains the final branch-level verification and review checkpoint; its status must be evidenced by fresh command output rather than inferred from this note.

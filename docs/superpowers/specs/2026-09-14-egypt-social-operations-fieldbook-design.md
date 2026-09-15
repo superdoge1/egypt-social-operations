@@ -67,3 +67,6 @@ All store metrics, rankings, payments, holidays, rates, and regulation are dated
 
 The final plan contains three priorities, owners, KPI definitions, baseline or baseline-request logic, target-setting method, experiment sequence, dependencies, budget assumptions, safety guardrails, stop conditions, and review cadence. It must not invent numerical targets when internal data is unavailable.
 
+## Implementation status (updated 2026-09-15)
+
+This specification remains the product and content contract. The repository now includes the documented public/unofficial positioning, static Astro metadata compatible with the configured site and base path, local-only progress disclosure, and a pinned Node 24 Pages workflow. These are implementation facts, not a deployment claim: publication is intentionally unverified in this workspace, and mutable source, market, payment, holiday, and regulatory facts still require human review before operational use.

@@ -9,6 +9,8 @@ interface Props {
 
 const { title, description = '面向埃及 SUGO 客户运营的公开证据学习场。' } = Astro.props;
 const currentPath = Astro.url.pathname;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const pageTitle = `${title} · Egypt Social Operations Fieldbook`;
 const nav = [
   { href: withBase(''), label: '起点' },
   { href: withBase('roadmap/'), label: '学习路线' },
@@ -23,8 +25,15 @@ const nav = [
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Egypt Social Operations Fieldbook" />
+    <meta property="og:locale" content="zh_CN" />
     <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
-    <title>{title} · Egypt Social Operations Fieldbook</title>
+    <title>{pageTitle}</title>
   </head>
   <body data-interface="cairo-signal-atlas">
     <a class="skip-link" href="#main">跳到正文</a>
@@ -43,6 +52,7 @@ const nav = [
     <main id="main"><slot /></main>
     <footer>
       <p>把每一次阅读、请求和访谈，都留下可复核的证据痕迹。</p>
+      <p class="footer-disclaimer">非官方教育资源；不构成法律、税务、隐私、雇佣或监管建议。公开来源与原创模板不包含内部资料。</p>
       <p class="mono">OPEN FIELD BOOK · LOCAL-FIRST PROGRESS · 2026</p>
     </footer>
   </body>

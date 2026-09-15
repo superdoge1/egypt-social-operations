@@ -4,6 +4,8 @@ dist/
 .firecrawl/
 playwright-report/
 test-results/
+reports/
+screenshots/
 .DS_Store
 .worktrees/
 .superpowers/
@@ -13,5 +15,9 @@ yarn-error.log*
 pnpm-debug.log*
 .env
 .env.*
+*.doc
+*.docx
+*.docm
 task-3-report.md
+task-4-report.md
 .idea/
