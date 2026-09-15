@@ -23,6 +23,7 @@ const { lessonId, lessonIds, storageKey, quiz } = Astro.props;
     <p class="save-status note-warning" data-note-warning role="note">请勿填写公司机密、账号凭据、个人数据或可识别个案。</p>
     <textarea id={`notes-${lessonId}`} data-notes rows="6" placeholder="写下你的决策、疑问或下一次实验……" disabled></textarea>
     <p class="save-status" data-save-status aria-live="polite">尚未保存</p>
+    <p class="storage-limitation" data-lesson-storage-limitation role="status" hidden>本机存储不可用；本页关闭后会丢失，原有本机数据不会被覆盖。</p>
   </section>
   <button class="button complete" type="button" data-complete-lesson disabled>标记本节完成</button>
 </aside>
@@ -36,15 +37,24 @@ const { lessonId, lessonIds, storageKey, quiz } = Astro.props;
     const note = root.querySelector<HTMLTextAreaElement>('[data-notes]');
     const complete = root.querySelector<HTMLButtonElement>('[data-complete-lesson]');
     const status = root.querySelector<HTMLElement>('[data-save-status]');
+    const limitation = root.querySelector<HTMLElement>('[data-lesson-storage-limitation]');
     let storage: Storage | null = null;
-    try { storage = window.localStorage; } catch { /* Use this page as a volatile fallback. */ }
+    let storageIssue = false;
+    try {
+      storage = window.localStorage;
+      storage.getItem(key);
+    } catch {
+      storage = null;
+      storageIssue = true;
+    }
     let volatileState: ProgressState | null = null;
     const read = () => volatileState ?? (storage ? readStoredProgress(storage, key, ids) : createEmptyProgress());
     const write = (state: ProgressState) => {
       state.updatedAt = new Date().toISOString();
       const stored = storage ? saveStoredProgress(storage, key, state) : false;
       volatileState = stored ? null : state;
-      if (status) status.textContent = stored ? '已保存到本机' : '浏览器未能保存；本页关闭后会丢失';
+      if (!stored) storageIssue = true;
+      if (status) status.textContent = stored ? '已保存到本机' : storage ? '浏览器未能保存；本页关闭后会丢失' : '本机存储不可用；本页关闭后会丢失';
       window.dispatchEvent(new CustomEvent('learning-progress-changed'));
     };
     const render = () => {
@@ -53,6 +63,15 @@ const { lessonId, lessonIds, storageKey, quiz } = Astro.props;
         note.value = state.notes[lessonId] ?? '';
         if (status && !volatileState && Object.hasOwn(state.notes, lessonId)) status.textContent = '已保存到本机';
       }
+      const savedScore = state.quizScores[lessonId];
+      const feedback = root.querySelector<HTMLElement>('[data-quiz-feedback]');
+      const explanation = root.querySelector<HTMLElement>('[data-quiz-explanation]');
+      if (savedScore) {
+        if (feedback) feedback.textContent = `已保存答题结果：答对 ${savedScore.score} / ${savedScore.total}。选项勾选不会恢复。`;
+        if (explanation) explanation.hidden = savedScore.score !== savedScore.total;
+      }
+      if (limitation) limitation.hidden = !storageIssue;
+      if (status && storageIssue && !volatileState) status.textContent = '本机存储不可用；本页关闭后会丢失';
       const done = state.completedLessonIds.includes(lessonId);
       if (complete) {
         complete.textContent = done ? '已完成 · 点击撤销' : '标记本节完成';

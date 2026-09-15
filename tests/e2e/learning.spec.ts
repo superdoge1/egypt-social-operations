@@ -38,6 +38,48 @@ test('every lesson renders its evidence and daily-sprint contract', async ({ pag
   }
 });
 
+test('public routes load without runtime or script and stylesheet resource failures', async ({ page }) => {
+  const failures: string[] = [];
+  page.on('pageerror', (error) => failures.push(`pageerror: ${error.message}`));
+  page.on('console', (message) => {
+    if (message.type() === 'error' && !message.location().url.endsWith('/not-a-route/')) failures.push(`console: ${message.text()}`);
+  });
+  page.on('requestfailed', (request) => failures.push(`requestfailed: ${request.url()} ${request.failure()?.errorText ?? ''}`));
+  page.on('response', (response) => {
+    const resourceType = response.request().resourceType();
+    if ((resourceType === 'script' || resourceType === 'stylesheet') && !response.ok()) {
+      failures.push(`${resourceType}: ${response.status()} ${response.url()}`);
+    }
+  });
+
+  for (const route of ['./', './roadmap/', './projects/', './resources/', ...lessonRoutes.map((lessonId) => `./learn/${lessonId}/`)]) {
+    await page.goto(route);
+    await expect(page.locator('main h1')).toBeVisible();
+  }
+
+  expect(failures).toEqual([]);
+});
+
+test('the intentional missing-route document is a 404 without failed assets', async ({ page }) => {
+  const failures: string[] = [];
+  page.on('pageerror', (error) => failures.push(`pageerror: ${error.message}`));
+  page.on('console', (message) => {
+    if (message.type() === 'error' && !message.location().url.endsWith('/not-a-route/')) failures.push(`console: ${message.text()}`);
+  });
+  page.on('requestfailed', (request) => failures.push(`requestfailed: ${request.url()} ${request.failure()?.errorText ?? ''}`));
+  page.on('response', (response) => {
+    const resourceType = response.request().resourceType();
+    if ((resourceType === 'script' || resourceType === 'stylesheet') && !response.ok()) {
+      failures.push(`${resourceType}: ${response.status()} ${response.url()}`);
+    }
+  });
+
+  const response = await page.goto('./not-a-route/');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByText('ROUTE NOT FOUND · 404')).toBeVisible();
+  expect(failures).toEqual([]);
+});
+
 test.describe('Cairo Signal Atlas design contracts', () => {
   test('uses the exact approved fieldbook tokens', async ({ page }) => {
     await page.goto('./');
@@ -202,6 +244,52 @@ test.describe('Cairo Signal Atlas design contracts', () => {
       expect(await label.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
     }
   });
+
+  test('keeps lesson source links and every lesson action target at least 44px tall on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const lessonId of lessonRoutes) {
+      await page.goto(`./learn/${lessonId}/`);
+      const sourceLinks = page.locator('[data-source-row] a');
+      for (const link of await sourceLinks.all()) {
+        expect(await link.evaluate((element) => getComputedStyle(element).display)).toMatch(/inline-flex|flex|block|inline-block/);
+        expect(await link.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+      }
+      for (const target of await page.locator('main a, main button').all()) {
+        expect(await target.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+      }
+    }
+  });
+
+  test('keeps privacy, state, source, and footer metadata at readable sizes', async ({ page }) => {
+    await page.goto('./learn/social-entertainment-landscape/');
+    for (const selector of ['.sources small', '.save-status', '.note-warning']) {
+      const sizes = await page.locator(selector).evaluateAll((elements) => elements.map((element) => parseFloat(getComputedStyle(element).fontSize)));
+      expect(Math.min(...sizes)).toBeGreaterThanOrEqual(16);
+    }
+    await page.goto('./');
+    for (const selector of ['.footer-disclaimer', '[data-storage-limitation]']) {
+      const sizes = await page.locator(selector).evaluateAll((elements) => elements.map((element) => parseFloat(getComputedStyle(element).fontSize)));
+      expect(Math.min(...sizes)).toBeGreaterThanOrEqual(16);
+    }
+  });
+
+  test('uses volatile lesson state when localStorage getter works but reads are blocked', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(window, '__lessonStorageWrites', { configurable: true, value: 0, writable: true });
+      Storage.prototype.getItem = () => { throw new DOMException('blocked', 'SecurityError'); };
+      Storage.prototype.setItem = () => {
+        (window as unknown as Window & { __lessonStorageWrites: number }).__lessonStorageWrites += 1;
+      };
+    });
+    await page.goto('./learn/social-entertainment-landscape/');
+    await expect(page.locator('[data-lesson-controls]')).toHaveAttribute('data-ready', 'true');
+    await expect(page.locator('[data-lesson-storage-limitation]')).toBeVisible();
+    await expect(page.locator('[data-save-status]')).toContainText('本机存储不可用；本页关闭后会丢失');
+    await page.getByLabel('学习笔记 仅保存在这台设备').fill('只在当前页保存');
+    await page.getByRole('button', { name: '标记本节完成' }).click();
+    await expect(page.getByRole('button', { name: '已完成 · 点击撤销' })).toBeVisible();
+    expect(await page.evaluate(() => (window as unknown as Window & { __lessonStorageWrites: number }).__lessonStorageWrites)).toBe(0);
+  });
 });
 
 test('learning interface keeps its responsive contract', async ({ page }) => {
@@ -244,12 +332,15 @@ test('learner completes a lesson and keeps progress after reload', async ({ page
   await page.getByLabel('学习笔记 仅保存在这台设备').fill('先写目标和验收，再选择技术栈。');
   await page.getByLabel('公开产品表面、内部数据、访谈和运营假设').check();
   await page.getByRole('button', { name: '检查答案' }).click();
-  await expect(page.getByText('正确。把证据分层带进下一次 Egypt 运营复盘。')).toBeVisible();
+  await expect(page.getByText('已保存答题结果：答对 1 / 1。选项勾选不会恢复。')).toBeVisible();
   await page.getByRole('button', { name: '标记本节完成' }).click();
   await page.reload();
 
   await expect(page.getByRole('button', { name: '已完成 · 点击撤销' })).toBeVisible();
   await expect(page.getByLabel('学习笔记 仅保存在这台设备')).toHaveValue('先写目标和验收，再选择技术栈。');
+  await expect(page.getByText('已保存答题结果：答对 1 / 1。选项勾选不会恢复。')).toBeVisible();
+  await expect(page.locator('[data-quiz-explanation]')).toBeVisible();
+  await expect(page.locator('.quiz-options input:checked')).toHaveCount(0);
   await page.evaluate(() => {
     Storage.prototype.setItem = () => { throw new DOMException('full', 'QuotaExceededError'); };
   });
