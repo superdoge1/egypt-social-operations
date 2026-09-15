@@ -262,7 +262,7 @@ test.describe('Cairo Signal Atlas design contracts', () => {
 
   test('keeps privacy, state, source, and footer metadata at readable sizes', async ({ page }) => {
     await page.goto('./learn/social-entertainment-landscape/');
-    for (const selector of ['.sources small', '.save-status', '.note-warning']) {
+    for (const selector of ['.sources small', '.save-status', '.note-warning', '.note-label span']) {
       const sizes = await page.locator(selector).evaluateAll((elements) => elements.map((element) => parseFloat(getComputedStyle(element).fontSize)));
       expect(Math.min(...sizes)).toBeGreaterThanOrEqual(16);
     }
