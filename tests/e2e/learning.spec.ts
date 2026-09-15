@@ -38,41 +38,57 @@ test('every lesson renders its evidence and daily-sprint contract', async ({ pag
   }
 });
 
-test.describe('approved console design contracts', () => {
-  test('uses the exact approved nine-token palette', async ({ page }) => {
+test.describe('Cairo Signal Atlas design contracts', () => {
+  test('uses the exact approved fieldbook tokens', async ({ page }) => {
     await page.goto('./');
 
     const tokens = await page.locator(':root').evaluate((root) => {
       const styles = getComputedStyle(root);
+      const expandHex = (value: string) => value === '#fff' ? '#ffffff' : value;
       return Object.fromEntries([
-        ['background', '--ink'],
-        ['panel', '--panel'],
-        ['raisedPanel', '--panel-raised'],
-        ['text', '--text'],
+        ['paper', '--paper'],
+        ['sheet', '--sheet'],
+        ['ink', '--ink'],
         ['muted', '--muted'],
-        ['signal', '--signal'],
-        ['info', '--cyan'],
-        ['agent', '--violet'],
+        ['nile', '--nile'],
+        ['sun', '--sun'],
+        ['coral', '--coral'],
         ['line', '--line'],
-      ].map(([name, property]) => [name, styles.getPropertyValue(property).trim().toLowerCase()]));
+      ].map(([name, property]) => [name, expandHex(styles.getPropertyValue(property).trim().toLowerCase())]));
     });
 
     expect(tokens).toEqual({
-      background: '#070a0f',
-      panel: '#0e151d',
-      raisedPanel: '#131d27',
-      text: '#f0f5f1',
-      muted: '#97aaa4',
-      signal: '#baf46d',
-      info: '#68dce5',
-      agent: '#9f91ff',
-      line: '#273440',
+      paper: '#f4f7f5',
+      sheet: '#ffffff',
+      ink: '#102a43',
+      muted: '#536873',
+      nile: '#087e8b',
+      sun: '#f4b942',
+      coral: '#b84a3a',
+      line: '#cbd8d9',
     });
   });
 
-  test('keeps lesson outcome body copy at least 16px', async ({ page }) => {
+  test('identifies the interface as Cairo Signal Atlas', async ({ page }) => {
     await page.goto('./');
-    const fontSize = await page.locator('.lesson-card .outcome').first().evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
+    await expect(page.locator('body')).toHaveAttribute('data-interface', 'cairo-signal-atlas');
+    await expect(page.locator('[data-nile-spine]')).toBeVisible();
+  });
+
+  test('renders eleven ordered checkpoints and four review gates', async ({ page }) => {
+    await page.goto('./');
+    await expect(page.locator('[data-nile-spine] [data-checkpoint]')).toHaveCount(11);
+    await expect(page.locator('[data-review-gate]')).toHaveCount(4);
+    await expect(page.locator('[data-nile-spine]')).toContainText('PUBLIC');
+    await expect(page.locator('[data-nile-spine]')).toContainText('INTERVIEW');
+    const orders = await page.locator('[data-nile-spine] [data-checkpoint]').evaluateAll((items) => items.map((item) => item.getAttribute('data-order')));
+    expect(orders).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
+  });
+
+  test('keeps one page H1 and lesson outcome body copy at least 16px', async ({ page }) => {
+    await page.goto('./');
+    await expect(page.locator('main h1')).toHaveCount(1);
+    const fontSize = await page.locator('.route-card .outcome').first().evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
     expect(fontSize).toBeGreaterThanOrEqual(16);
   });
 
@@ -83,11 +99,49 @@ test.describe('approved console design contracts', () => {
     expect(gap).toBeGreaterThanOrEqual(8);
   });
 
-  test('keeps course-card links at least 44px tall on mobile', async ({ page }) => {
+  test('keeps course-card links and buttons at least 44px tall on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('./');
-    const heights = await page.locator('.lesson-card h3 a').evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+    const heights = await page.locator('.route-card h3 a').evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
     expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
+    const targets = page.locator('a.button, button');
+    for (const target of await targets.all()) {
+      expect(await target.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('keeps focus visible and removes entrance motion when reduced motion is requested', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('./');
+    await expect(page.locator('[data-entrance]').first()).toHaveCSS('animation-name', 'none');
+    const cta = page.getByRole('link', { name: '开始 Day 1' });
+    await cta.focus();
+    const outline = await cta.evaluate((element) => {
+      const styles = getComputedStyle(element);
+      return { width: parseFloat(styles.outlineWidth), style: styles.outlineStyle, color: styles.outlineColor };
+    });
+    expect(outline.width).toBeGreaterThanOrEqual(3);
+    expect(outline.style).not.toBe('none');
+    expect(outline.color).not.toBe('rgb(0, 0, 0)');
+  });
+
+  test('keeps the evidence desk sticky on desktop and in flow on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('./learn/social-entertainment-landscape/');
+    await expect(page.locator('[data-evidence-desk]')).toBeVisible();
+    await expect(page.locator('[data-evidence-desk]')).toHaveCSS('position', 'sticky');
+    await page.setViewportSize({ width: 375, height: 812 });
+    await expect(page.locator('[data-evidence-desk]')).toHaveCSS('position', 'static');
+  });
+
+  test('keeps the home and first lesson within the viewport at required widths', async ({ page }) => {
+    for (const width of [375, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./');
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+      await page.goto('./learn/social-entertainment-landscape/');
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
   });
 });
 
@@ -96,10 +150,10 @@ test('learning interface keeps its responsive contract', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
 
-  await expect(page.locator('body')).toHaveAttribute('data-interface', 'agent-console');
+  await expect(page.locator('body')).toHaveAttribute('data-interface', 'cairo-signal-atlas');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 
-  const primaryCta = page.getByRole('link', { name: '开始第一次构建' });
+  const primaryCta = page.getByRole('link', { name: '开始 Day 1' });
   await expect(primaryCta).toBeVisible();
   expect(await primaryCta.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
 
@@ -122,8 +176,8 @@ test('learning interface keeps its responsive contract', async ({ page }) => {
 
 test('learner completes a lesson and keeps progress after reload', async ({ page }) => {
   await page.goto('./');
-  await expect(page.getByRole('heading', { name: '先做出来。 再做可靠。' })).toBeVisible();
-  await page.getByRole('link', { name: '开始第一次构建' }).click();
+  await expect(page.getByRole('heading', { name: '先看清。 再跑可靠。' })).toBeVisible();
+  await page.getByRole('link', { name: '开始 Day 1' }).click();
   await expect(page.getByRole('heading', { name: '看懂社交娱乐：从类别到 MICO WORLD' })).toBeVisible();
   await expect(page.locator('[data-lesson-controls]')).toHaveAttribute('data-ready', 'true');
   await expect(page.locator('[data-note-warning]')).toContainText('公司机密、账号凭据、个人数据或可识别个案');
@@ -154,6 +208,6 @@ test('base-path navigation and final project route work', async ({ page }) => {
 
 test('unknown route shows a directed 404', async ({ page }) => {
   await page.goto('./not-a-route/');
-  await expect(page.getByText('BUILD ERROR · 404')).toBeVisible();
+  await expect(page.getByText('ROUTE NOT FOUND · 404')).toBeVisible();
   await expect(page.getByRole('link', { name: '返回学习路线' })).toBeVisible();
 });

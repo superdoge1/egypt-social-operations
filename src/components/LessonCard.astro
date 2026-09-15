@@ -1,15 +1,16 @@
 ---
 import { withBase } from '../lib/urls';
-interface Props { id: string; title: string; description: string; phase: string; order: number; estimatedMinutes: number; outcomes: string[]; }
-const { id, title, description, phase, order, estimatedMinutes, outcomes } = Astro.props;
+interface Props { id: string; title: string; description: string; phase: string; order: number; estimatedMinutes: number; outcomes: string[]; days: number[]; }
+const { id, title, description, phase, order, estimatedMinutes, outcomes, days } = Astro.props;
+const evidence = order <= 3 ? ['public', 'PUBLIC SOURCE'] : order <= 6 ? ['data', 'DATA REQUEST'] : order <= 9 ? ['interview', 'INTERVIEW CROSS-CHECK'] : ['plan', 'OPERATING PLAN'];
 ---
-<article class="lesson-card">
-  <div class="trace-node" aria-hidden="true"><span>{String(order).padStart(2, '0')}</span></div>
-  <div class="lesson-card-body">
-    <p class="lesson-meta"><span>{phase}</span><span>{estimatedMinutes} MIN</span></p>
-    <span class="stage-index">BUILD STAGE {String(order).padStart(2, '0')}</span>
+<li class="route-item" data-checkpoint data-order={order}>
+  <div class="checkpoint-node" aria-hidden="true">{String(order).padStart(2, '0')}</div>
+  <article class="route-card">
+    <div class="route-card-header"><p class="lesson-meta"><span>Days {days[0]}–{days[days.length - 1]}</span><span>{estimatedMinutes} MIN</span></p><span class={`evidence-badge ${evidence[0]}`}>{evidence[1]}</span></div>
+    <span class="stage-index">CHECKPOINT {String(order).padStart(2, '0')} · {phase}</span>
     <h3><a href={withBase(`learn/${id}/`)}>{title}</a></h3>
     <p>{description}</p>
     <p class="outcome">产出：{outcomes[0]}</p>
-  </div>
-</article>
+  </article>
+</li>

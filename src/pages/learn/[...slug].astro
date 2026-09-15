@@ -29,7 +29,7 @@ const artifactVisibilityLabel = (visibility: string) => ({
 
 <BaseLayout title={lesson.data.title} description={lesson.data.description}>
   <div class="page-shell">
-    <header class="lesson-header">
+    <header class="lesson-header" data-dossier>
       <span class="eyebrow">{lesson.data.phase} · MODULE {String(lesson.data.order).padStart(2, '0')}</span>
       <h1>{lesson.data.title}</h1>
       <p class="lead">{lesson.data.description}</p>

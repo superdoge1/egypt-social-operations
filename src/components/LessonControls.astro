@@ -3,9 +3,9 @@ import type { LessonQuiz } from '../data/quizzes';
 interface Props { lessonId: string; lessonIds: string[]; storageKey: string; quiz: LessonQuiz; }
 const { lessonId, lessonIds, storageKey, quiz } = Astro.props;
 ---
-<aside class="lesson-controls" data-lesson-controls data-lesson-id={lessonId} data-lessons={JSON.stringify(lessonIds)} data-storage-key={storageKey} data-answers={JSON.stringify(quiz.answers)} aria-busy="true">
+<aside class="lesson-controls" data-evidence-desk data-lesson-controls data-lesson-id={lessonId} data-lessons={JSON.stringify(lessonIds)} data-storage-key={storageKey} data-answers={JSON.stringify(quiz.answers)} aria-busy="true">
   <header class="inspector-header">
-    <span class="mono">LESSON INSPECTOR</span>
+    <span class="mono">EVIDENCE DESK</span>
     <span class="inspector-status"><i aria-hidden="true"></i> LOCAL STATE</span>
   </header>
   <section>

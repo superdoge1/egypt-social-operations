@@ -4,13 +4,13 @@ const { lessonIds, storageKey } = Astro.props;
 ---
 <section class="progress-panel" data-progress-panel data-storage-key={storageKey} data-lessons={JSON.stringify(lessonIds)} aria-label="学习进度" data-entrance>
   <div class="progress-copy">
-    <span class="eyebrow">BUILD STATUS</span>
+    <span class="eyebrow">PROGRESS LEDGER</span>
     <strong data-progress-label>0 / {lessonIds.length} 已完成</strong>
   </div>
   <strong class="progress-percentage" data-progress-percentage>0%</strong>
   <div class="progress-meter">
     <div class="progress-track" role="progressbar" aria-label="课程完成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-progress-fill></span></div>
-    <span class="progress-caption mono">PIPELINE COMPLETION</span>
+    <span class="progress-caption mono">ROUTE COMPLETION</span>
   </div>
   <button class="text-button" type="button" data-reset-progress>重置进度</button>
 </section>

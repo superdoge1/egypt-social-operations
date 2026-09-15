@@ -13,4 +13,5 @@ yarn-error.log*
 pnpm-debug.log*
 .env
 .env.*
+task-3-report.md
 .idea/

@@ -26,15 +26,15 @@ const nav = [
     <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
     <title>{title} · Egypt Social Operations Fieldbook</title>
   </head>
-  <body data-interface="agent-console">
+  <body data-interface="cairo-signal-atlas">
     <a class="skip-link" href="#main">跳到正文</a>
     <header class="site-header" data-entrance>
       <a class="brand" href={withBase('')} aria-label="Egypt Social Operations 首页">
-        <span class="brand-mark" aria-hidden="true">ES</span>
-        <span><strong>FIELD BOOK</strong><small>EGYPT SOCIAL OPERATIONS</small></span>
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" role="img"><path d="M5 6h26M5 12h18M5 18h26M5 24h13M5 30h26" /></svg></span>
+        <span><strong>CAIRO SIGNAL ATLAS</strong><small>EGYPT SOCIAL OPERATIONS · PUBLIC FIELD BOOK</small></span>
       </a>
       <div class="header-tools">
-        <span class="header-status"><i aria-hidden="true"></i> SYSTEM ONLINE</span>
+        <span class="header-status"><i aria-hidden="true"></i> PUBLIC / UNOFFICIAL</span>
         <nav aria-label="主导航">
           {nav.map((item) => <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>{item.label}</a>)}
         </nav>
@@ -42,8 +42,8 @@ const nav = [
     </header>
     <main id="main"><slot /></main>
     <footer>
-      <p>把每一次生成，都变成一次可解释、可验证、可交付的构建。</p>
-      <p class="mono">OPEN CURRICULUM · LOCAL-FIRST PROGRESS · 2026</p>
+      <p>把每一次阅读、请求和访谈，都留下可复核的证据痕迹。</p>
+      <p class="mono">OPEN FIELD BOOK · LOCAL-FIRST PROGRESS · 2026</p>
     </footer>
   </body>
 </html>
